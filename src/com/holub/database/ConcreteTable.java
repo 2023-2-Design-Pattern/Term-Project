@@ -28,6 +28,8 @@ package com.holub.database;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Stream;
+
 import com.holub.tools.ArrayIterator;
 
 /**
@@ -67,9 +69,25 @@ import com.holub.tools.ArrayIterator;
 	private transient boolean isDirty = false;
 	private transient LinkedList transactionStack = new LinkedList();
 
+	/*
+	Getter
+	 */
+
+	public LinkedList getRowSet() {
+		return rowSet;
+	}
+
+	public String[] getColumnNames() {
+		return columnNames;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
 	/**********************************************************************
 	 * Create a table with the given name and columns.
-	 * 
+	 *
 	 * @param tableName the name of the table.
 	 * @param an        array of Strings that specify the column names.
 	 */
@@ -162,10 +180,10 @@ import com.holub.tools.ArrayIterator;
 
 	// ----------------------------------------------------------------------
 	public int insert(Map row) { // A map is considered to be "ordered," with the order defined
-									// as the order in which an iterator across a "view" returns
-									// values. My reading of this statement is that the iterator
-									// across the keySet() visits keys in the same order as the
-									// iterator across the values() visits the values.
+		// as the order in which an iterator across a "view" returns
+		// values. My reading of this statement is that the iterator
+		// across the keySet() visits keys in the same order as the
+		// iterator across the values() visits the values.
 
 		return insert(row.keySet(), row.values());
 	}
@@ -443,7 +461,7 @@ import com.holub.tools.ArrayIterator;
 	 * This version of select does a join
 	 */
 	public Table select(Selector where, String[] requestedColumns, // {=ConcreteTable.select.default}
-			Table[] otherTables) {
+						Table[] otherTables) {
 		// If we're not doing a join, use the more efficient version
 		// of select().
 
@@ -459,6 +477,16 @@ import com.holub.tools.ArrayIterator;
 
 		// Create places to hold the result of the join and to hold
 		// iterators for each table involved in the join.
+
+		// Fix point - join 했을 때의 모든 컬럼 불러오기
+		if (requestedColumns == null){
+			ArrayList<String> tempList = new ArrayList<String>();
+			requestedColumns = tempList.toArray(String[]::new);
+			for (Table table : allTables){
+				ConcreteTable concreteTable = (ConcreteTable) table;
+				requestedColumns = Stream.concat(Arrays.stream(requestedColumns), Arrays.stream(concreteTable.getColumnNames())).toArray(String[]::new);
+			}
+		}
 
 		Table resultTable = new ConcreteTable(null, requestedColumns);
 		Cursor[] envelope = new Cursor[allTables.length];
@@ -487,11 +515,11 @@ import com.holub.tools.ArrayIterator;
 	 * up a notch, advances the correct iterator, and recurses back down.
 	 */
 	private static void selectFromCartesianProduct(int level, Selector where, String[] requestedColumns,
-			Table[] allTables, Cursor[] allIterators, Table resultTable) {
+												   Table[] allTables, Cursor[] allIterators, Table resultTable) {
 		allIterators[level] = allTables[level].rows();
 
 		while (allIterators[level].advance()) { // If we haven't reached the tips of the branches yet,
-												// go down one more level.
+			// go down one more level.
 
 			if (level < allIterators.length - 1)
 				selectFromCartesianProduct(level + 1, where, requestedColumns, allTables, allIterators, resultTable);
@@ -509,7 +537,7 @@ import com.holub.tools.ArrayIterator;
 
 	/**
 	 * Insert an approved row into the result table:
-	 * 
+	 *
 	 * <PRE>
 	 * 		for( every requested column )
 	 * 			for( every table in the join )
@@ -517,7 +545,7 @@ import com.holub.tools.ArrayIterator;
 	 * 					add the associated value to the result table
 	 *
 	 * </PRE>
-	 * 
+	 *
 	 * Only one column with a given name is added, even if that column appears in
 	 * multiple tables. Columns in tables at the beginning of the list take
 	 * precedence over identically named columns that occur later in the list.
@@ -542,7 +570,7 @@ import com.holub.tools.ArrayIterator;
 	 * A collection variant on the array version. Just converts the collection to an
 	 * array and then chains to the other version
 	 * ({@linkplain #select(Selector,String[],Table[]) see}).
-	 * 
+	 *
 	 * @param requestedColumns the value returned from the {@link #toString} method
 	 *                         of the elements of this collection are used as the
 	 *                         column names.
@@ -804,9 +832,9 @@ import com.holub.tools.ArrayIterator;
 		}
 
 		public void testStore() throws IOException, ClassNotFoundException { // Flush the table to disk, then reread it.
-																				// Subsequent tests that use the
-																				// "people" table will
-																				// fail if this operation fails.
+			// Subsequent tests that use the
+			// "people" table will
+			// fail if this operation fails.
 
 			Writer out = new FileWriter("people");
 			people.export(new CSVExporter(out));
@@ -856,11 +884,11 @@ import com.holub.tools.ArrayIterator;
 			third.insert(new Object[] { "2", "addrId=2" });
 
 			result = people.select(new Selector.Adapter() {
-				public boolean approve(Cursor[] tables) {
-					return (tables[0].column("addrId").equals(tables[1].column("addrId"))
-							&& tables[0].column("addrId").equals(tables[2].column("addrId")));
-				}
-			},
+									   public boolean approve(Cursor[] tables) {
+										   return (tables[0].column("addrId").equals(tables[1].column("addrId"))
+												   && tables[0].column("addrId").equals(tables[2].column("addrId")));
+									   }
+								   },
 
 					new String[] { "last", "first", "state", "text" }, new Table[] { address, third });
 
