@@ -19,6 +19,7 @@ public class XMLExporter implements Table.Exporter {
 	public void storeMetadata(String tableName, int width, int height, Iterator columnNames) throws IOException  {
 		this.tableName = tableName;
 		int idx = 0;
+		this.columnNames = new String[width];
 		while(columnNames.hasNext()) {
 			this.columnNames[idx++] = columnNames.next().toString();
 		}	
