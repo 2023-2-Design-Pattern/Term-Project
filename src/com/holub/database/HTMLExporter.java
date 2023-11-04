@@ -35,8 +35,6 @@ public class HTMLExporter implements Table.Exporter {
     	out.write("<tbody>");
     }
 
-
-    @Override
     public void storeRow(Iterator data) throws IOException {
     	out.write("<tr>");
     	while(data.hasNext()) {
