@@ -245,8 +245,12 @@ public class Console
 		}
 
 		try
-		{	
-			connection = DriverManager.getConnection("file:/"+databaseName, "harpo", "swordfish");
+		{
+			// for mac (mac의 경우 "file:/" -> "file:" 로 변환해준다.)
+			connection = DriverManager.getConnection("file:"+databaseName, "harpo", "swordfish");
+
+			// for window
+			// connection = DriverManager.getConnection("file:/"+databaseName, "harpo", "swordfish");
 			statement = connection.createStatement();
 		}
 		catch( SQLException e )
