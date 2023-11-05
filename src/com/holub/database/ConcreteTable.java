@@ -69,27 +69,11 @@ import com.holub.tools.ArrayIterator;
 	private transient boolean isDirty = false;
 	private transient LinkedList transactionStack = new LinkedList();
 
-	/*
-	Getter
-	 */
-
-	public LinkedList getRowSet() {
-		return rowSet;
-	}
-
-	public String[] getColumnNames() {
-		return columnNames;
-	}
-
-	public String getTableName() {
-		return tableName;
-	}
 
 	/**********************************************************************
 	 * Create a table with the given name and columns.
 	 *
 	 * @param tableName the name of the table.
-	 * @param an        array of Strings that specify the column names.
 	 */
 	public ConcreteTable(String tableName, String[] columnNames) {
 		this.tableName = tableName;
@@ -479,13 +463,14 @@ import com.holub.tools.ArrayIterator;
 		// iterators for each table involved in the join.
 
 		// Fix point - join 했을 때의 모든 컬럼 불러오기
-		if (requestedColumns == null){
-			ArrayList<String> tempList = new ArrayList<String>();
-			requestedColumns = tempList.toArray(String[]::new);
-			for (Table table : allTables){
-				ConcreteTable concreteTable = (ConcreteTable) table;
-				requestedColumns = Stream.concat(Arrays.stream(requestedColumns), Arrays.stream(concreteTable.getColumnNames())).toArray(String[]::new);
-			}
+		if (Objects.isNull(requestedColumns)) {
+			Set<String> cols = new LinkedHashSet<>();
+
+			for(Table table : allTables)
+				for(int i = 0; i < table.rows().columnCount(); i++)
+					cols.add(table.rows().columnName(i));
+
+			requestedColumns = cols.toArray(new String[cols.size()]);
 		}
 
 		Table resultTable = new ConcreteTable(null, requestedColumns);
