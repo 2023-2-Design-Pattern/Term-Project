@@ -1,5 +1,7 @@
 package com.holub.rmi;
 
+import com.holub.rmi.test.SerializableTest;
+
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -10,6 +12,12 @@ public class Server implements HolubInterface {
     @Override
     public String testMethod() {
         return "test rmi";
+    }
+
+    @Override
+    public SerializableTest testSerializable(String userId, String userName) {
+        SerializableTest serial = new SerializableTest(userId, userName);
+        return serial;
     }
 
     public static void main(String args[]) {
