@@ -28,6 +28,8 @@ package com.holub.database.jdbc;
 
 import java.sql.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.holub.database.*;
 import com.holub.database.jdbc.adapters.*;
@@ -38,6 +40,7 @@ import com.holub.database.jdbc.adapters.*;
 
 public class JDBCStatement extends StatementAdapter
 {	private Database database;
+	private List<String> sql_batch = new ArrayList<>();
 
 	public JDBCStatement(Database database)
 	{	this.database = database;
@@ -62,6 +65,10 @@ public class JDBCStatement extends StatementAdapter
 		{	throw new SQLException( e.getMessage() );
 		}
 	}
+
+	public void addBatch(String sql) throws SQLException {throw new SQLException("Statement.addBatch(String sql) not supported");}
+	public int[] executeBatch() throws SQLException {throw new SQLException("not supported");}
+	public void clearBatch() throws SQLException {throw new SQLException("Statement.clearBatch() not supported");}
 
 	public void close() throws SQLException
 	{	// does nothing.
