@@ -40,12 +40,10 @@ public class JDBCTest
 		"(3,  'Marie',  'Mon', 2, 'CaffeMocha')",
 	};
 
-	public boolean batchExecution(String[] sqls) throws Exception{
+	public boolean batchExecution(String sql, String[] datas) throws Exception{
 		Connection connection = null;
-		Statement  statement  = null;
 		PreparedStatement ptmt = null;
-		String sql = "select * from name";
-		int count[] = new int[sqls.length];
+		int count[] = new int[datas.length];
 
 		try {
 			connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
@@ -54,8 +52,8 @@ public class JDBCTest
 			// autoCommit을 꺼준다.
 			connection.setAutoCommit(false);
 			ptmt = connection.prepareStatement(sql);
-			for (int i =0;  i <sqls.length; i++){
-				ptmt.addBatch(sql);
+			for (int i =0;  i <datas.length; i++){
+				ptmt.addBatch(datas[i]);
 			}
 			count = ptmt.executeBatch();
 			connection.commit();

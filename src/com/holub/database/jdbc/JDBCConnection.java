@@ -93,6 +93,10 @@ public class JDBCConnection extends ConnectionAdapter
 	{	return new JDBCStatement(database);
 	}
 
+	public PreparedStatement preparedStatement() throws SQLException
+	{ return (PreparedStatement) new JDBCPreparedStatement(database);
+	}
+
 	/** Terminate the current transactions and start a new
 	 *  one. Does nothing if auto-commit mode is on.
 	 *  @see #setAutoCommit

@@ -40,7 +40,6 @@ import com.holub.database.jdbc.adapters.*;
 
 public class JDBCStatement extends StatementAdapter
 {	private Database database;
-	private List<String> sql_batch = new ArrayList<>();
 
 	public JDBCStatement(Database database)
 	{	this.database = database;
@@ -65,26 +64,6 @@ public class JDBCStatement extends StatementAdapter
 		{	throw new SQLException( e.getMessage() );
 		}
 	}
-
-	public void addBatch(String sql) throws SQLException {
-		sql_batch.add(sql);
-	}
-	public int[] executeBatch() throws SQLException {
-		int count[] = new int[sql_batch.size()];
-		int cnt=0;
-		try
-		{
-			for(String sql : sql_batch){
-				count[cnt] = executeUpdate(sql);
-				cnt++;
-			}
-			return count;
-		}catch(Exception e){
-			throw new SQLException(e.getMessage());
-		}
-	}
-	public void clearBatch() throws SQLException {throw new SQLException("Statement.clearBatch() not supported");}
-
 	public void close() throws SQLException
 	{	// does nothing.
 	}
