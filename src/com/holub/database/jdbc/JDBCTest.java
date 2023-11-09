@@ -39,23 +39,25 @@ public class JDBCTest
 		"(2,  'JS',     'Mon', 1, 'Cappuccino')",
 		"(3,  'Marie',  'Mon', 2, 'CaffeMocha')",
 	};
+	
+	private static Connection connection = null;
+	private static Statement  statement  = null;
 
-	public boolean batchExecution(String sql, String[] datas) throws Exception{
-		Connection connection = null;
-		PreparedStatement ptmt = null;
+	public static boolean batchExecution(String sql, String[] datas) throws Exception{
 		int count[] = new int[datas.length];
 
 		try {
 			connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
 					"file:/c:/src/com/holub/database/jdbc/Dbase",
 					"harpo", "swordfish" );
-			// autoCommit을 꺼준다.
+			// autoCommit off
 			connection.setAutoCommit(false);
-			ptmt = connection.prepareStatement(sql);
+			statement = connection.prepareStatement(sql);		// sql + "(?, ?, ?, ?, ?)" 
 			for (int i =0;  i <datas.length; i++){
-				ptmt.addBatch(datas[i]);
+				statement.addBatch(datas[i]);					// PreparedStatement - addBatch()
+				// System.out.println(sql+datas[i]);
 			}
-			count = ptmt.executeBatch();
+			count = statement.executeBatch();
 			connection.commit();
 		} catch (SQLException e){
 			e.printStackTrace();
@@ -75,7 +77,7 @@ public class JDBCTest
 		boolean result = true;
 
 		for(int i=0; i<count.length; i++) {
-			// 0이상이면 성공, -2이면 성공
+			// over 0, -2 success
 			if(count[i] < 0) {
 				if (count[i] != -2)
 					result = false;
@@ -89,13 +91,15 @@ public class JDBCTest
 	{
 		Class.forName( "com.holub.database.jdbc.JDBCDriver" ) //{=JDBCTest.forName}
 												.newInstance();
-		Connection connection = null;
-		Statement  statement  = null;
+		
 		try
 		{	connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
 							"file:/c:/src/com/holub/database/jdbc/Dbase",
 							"harpo", "swordfish" );
-
+			
+			batchExecution("insert into test VALUES ", data);
+			
+			/*
 			statement = connection.createStatement();
 		
 			statement.executeUpdate(
@@ -140,6 +144,7 @@ public class JDBCTest
 					+ result.getString("Type")
 				);
 			}
+			*/
 		}
 		finally
 		{

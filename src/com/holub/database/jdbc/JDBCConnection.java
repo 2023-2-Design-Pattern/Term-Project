@@ -93,8 +93,10 @@ public class JDBCConnection extends ConnectionAdapter
 	{	return new JDBCStatement(database);
 	}
 
-	public PreparedStatement preparedStatement() throws SQLException
-	{ return (PreparedStatement) new JDBCPreparedStatement(database);
+	public PreparedStatement prepareStatement(String sql) throws SQLException
+	{ 	return new JDBCPreparedStatement(database, sql);	
+	// cannot be casted without implements PreparedStatement
+	// need to write overriding methods for PreparedStatement
 	}
 
 	/** Terminate the current transactions and start a new
