@@ -40,11 +40,57 @@ public class JDBCTest
 		"(3,  'Marie',  'Mon', 2, 'CaffeMocha')",
 	};
 
+	public boolean batchExecution(String[] sqls) throws Exception{
+		Connection connection = null;
+		Statement  statement  = null;
+		PreparedStatement ptmt = null;
+		String sql = "select * from name";
+		int count[] = new int[sqls.length];
+
+		try {
+			connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
+					"file:/c:/src/com/holub/database/jdbc/Dbase",
+					"harpo", "swordfish" );
+			// autoCommit을 꺼준다.
+			connection.setAutoCommit(false);
+			ptmt = connection.prepareStatement(sql);
+			for (int i =0;  i <sqls.length; i++){
+				ptmt.addBatch(sql);
+			}
+			count = ptmt.executeBatch();
+			connection.commit();
+		} catch (SQLException e){
+			e.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e1){
+				e1.printStackTrace();
+			}
+		} finally{
+			try{
+				connection.setAutoCommit(true);
+			}catch (SQLException e){
+				e.printStackTrace();
+			}
+			connection.close();
+		}
+		boolean result = true;
+
+		for(int i=0; i<count.length; i++) {
+			// 0이상이면 성공, -2이면 성공
+			if(count[i] < 0) {
+				if (count[i] != -2)
+					result = false;
+				break;
+			}
+		}
+		return result;
+	}
+
 	public static void main(String[] args) throws Exception
 	{
 		Class.forName( "com.holub.database.jdbc.JDBCDriver" ) //{=JDBCTest.forName}
 												.newInstance();
-
 		Connection connection = null;
 		Statement  statement  = null;
 		try
