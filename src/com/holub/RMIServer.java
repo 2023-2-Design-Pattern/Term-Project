@@ -1,13 +1,14 @@
-package com.holub.rmi;
+package com.holub;
 
-import com.holub.rmi.test.SerializableTest;
+import com.holub.rmi.HolubInterface;
+import com.holub.rmi.serialobject.SerializableTest;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class Server implements HolubInterface {
-    public Server() {}
+public class RMIServer implements HolubInterface {
+    public RMIServer() {}
 
     @Override
     public String testMethod() {
@@ -22,7 +23,7 @@ public class Server implements HolubInterface {
 
     public static void main(String args[]) {
         try {
-            Server server = new Server();
+            RMIServer server = new RMIServer();
             HolubInterface stub = (HolubInterface) UnicastRemoteObject.exportObject(server, 0);
 
             Registry registry = LocateRegistry.createRegistry(1099);

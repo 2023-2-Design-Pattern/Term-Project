@@ -1,6 +1,6 @@
 package com.holub.rmi;
 
-import com.holub.rmi.test.SerializableTest;
+import com.holub.rmi.serialobject.SerializableTest;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

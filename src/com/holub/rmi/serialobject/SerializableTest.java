@@ -1,4 +1,4 @@
-package com.holub.rmi.test;
+package com.holub.rmi.serialobject;
 
 import java.io.Serializable;
 

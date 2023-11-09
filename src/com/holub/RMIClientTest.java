@@ -1,13 +1,14 @@
-package com.holub.rmi.test;
+package com.holub;
 
 import com.holub.rmi.HolubInterface;
+import com.holub.rmi.serialobject.SerializableTest;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-public class TestClient {
+public class RMIClientTest {
     public static void main(String[] args) {
-        new TestClient().go();
+        new RMIClientTest().go();
     }
 
     public void go() {
