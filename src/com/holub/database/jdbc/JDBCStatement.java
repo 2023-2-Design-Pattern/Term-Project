@@ -66,8 +66,19 @@ public class JDBCStatement extends StatementAdapter
 		}
 	}
 
-	public void addBatch(String sql) throws SQLException {throw new SQLException("Statement.addBatch(String sql) not supported");}
-	public int[] executeBatch() throws SQLException {throw new SQLException("not supported");}
+	public void addBatch(String sql) throws SQLException {
+		sql_batch.add(sql);
+	}
+	public int[] executeBatch() throws SQLException {
+		try
+		{
+			for(String sql : sql_batch){
+				exeucute(sql);
+			}
+		}catch(Exception e){
+			throw new SQLException(e.getMessage());
+		}
+	}
 	public void clearBatch() throws SQLException {throw new SQLException("Statement.clearBatch() not supported");}
 
 	public void close() throws SQLException
