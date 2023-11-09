@@ -70,11 +70,15 @@ public class JDBCStatement extends StatementAdapter
 		sql_batch.add(sql);
 	}
 	public int[] executeBatch() throws SQLException {
+		int count[] = new int[sql_batch.size()];
+		int cnt=0;
 		try
 		{
 			for(String sql : sql_batch){
-				exeucute(sql);
+				count[cnt] = executeUpdate(sql);
+				cnt++;
 			}
+			return count;
 		}catch(Exception e){
 			throw new SQLException(e.getMessage());
 		}
