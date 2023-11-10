@@ -24,7 +24,7 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.tools;
+package main.java.com.holub.tools;
 
 import java.util.*;
 

@@ -24,7 +24,7 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.text;
+package main.java.com.holub.text;
 
 /** The Begin token is special in that it has no width, and
  *	doesn't match anything in the input. It's used solely

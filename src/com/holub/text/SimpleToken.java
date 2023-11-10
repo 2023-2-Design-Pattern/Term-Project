@@ -24,10 +24,7 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.text;
-
-import java.util.*;
-import java.util.regex.*;
+package main.java.com.holub.text;
 
 /** Matches a simple symbol that doesn't have to be on a "word"
  *  boundary; punctuation, for example. SimpleToken

@@ -24,7 +24,7 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.database.jdbc;
+package main.java.com.holub.database.jdbc;
 
 import java.sql.*;
 
@@ -42,7 +42,7 @@ public class JDBCTest
 
 	public static void main(String[] args) throws Exception
 	{
-		Class.forName( "com.holub.database.jdbc.JDBCDriver" ) //{=JDBCTest.forName}
+		Class.forName("main.java.com.holub.database.jdbc.JDBCDriver") //{=JDBCTest.forName}
 												.newInstance();
 
 		Connection connection = null;

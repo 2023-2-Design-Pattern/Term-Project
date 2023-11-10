@@ -24,7 +24,7 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.database.jdbc.adapters;
+package main.java.com.holub.database.jdbc.adapters;
 import java.sql.*;
 
 /***

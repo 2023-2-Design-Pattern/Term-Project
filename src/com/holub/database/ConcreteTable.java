@@ -24,13 +24,12 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.database;
+package main.java.com.holub.database;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Stream;
 
-import com.holub.tools.ArrayIterator;
+import main.java.com.holub.tools.ArrayIterator;
 
 /**
  * A concrete implementation of the {@link Table} interface that implements an
@@ -895,8 +894,8 @@ import com.holub.tools.ArrayIterator;
 			System.out.println(people.toString());
 
 			System.out.println("commit(THIS_LEVEL)\n" + "rollback(Table.THIS_LEVEL)\n");
-			people.commit(Table.THIS_LEVEL);
-			people.rollback(Table.THIS_LEVEL);
+			people.commit(THIS_LEVEL);
+			people.rollback(THIS_LEVEL);
 			System.out.println(people.toString());
 
 			// Now test that nested transactions work correctly.
@@ -931,11 +930,11 @@ import com.holub.tools.ArrayIterator;
 			System.out.println(people.toString());
 
 			System.out.println("rollback(Table.THIS_LEVEL) the delete and update");
-			people.rollback(Table.THIS_LEVEL);
+			people.rollback(THIS_LEVEL);
 			System.out.println(people.toString());
 
 			System.out.println("rollback(Table.THIS_LEVEL) insert");
-			people.rollback(Table.THIS_LEVEL);
+			people.rollback(THIS_LEVEL);
 			System.out.println(people.toString());
 		}
 

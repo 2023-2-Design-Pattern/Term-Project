@@ -24,10 +24,12 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.text;
+package main.java.com.holub.text;
 
 import java.util.*;
 import java.util.regex.*;
+
+import main.java.com.holub.database.Database;
 
 /***
  *  A token set is a collection of tokens that define all possible
@@ -39,7 +41,7 @@ import java.util.regex.*;
  *  deciding whether it comes next in the input, and the
  *  tokens examine the input in the order that they were created.
  *	<p>
- *  See the source code for {@link com.holub.database.Database}
+ *  See the source code for {@link Database}
  *  (in the distribution jar) for an example of how a token set
  *  is used in conjunction with a Scanner.
  *

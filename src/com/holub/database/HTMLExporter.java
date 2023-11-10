@@ -1,4 +1,4 @@
-package com.holub.database;
+package main.java.com.holub.database;
 
 import java.io.*;
 import java.util.*;

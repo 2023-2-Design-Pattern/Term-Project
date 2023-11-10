@@ -24,16 +24,17 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.text;
+package main.java.com.holub.text;
 
 import java.util.Iterator;
 import java.io.*;
-import com.holub.text.ParseFailure;
+
+import main.java.com.holub.database.Database;
 
 /***
  *  A Scanner lets you read a file as a set of input tokens.
  *	<p>
- *  See the source code for {@link com.holub.database.Database}
+ *  See the source code for {@link Database}
  *  (in the distribution jar) for an example of how a token set
  *  is used in conjunction with a Scanner. Here's a stripped-down
  *  version:

@@ -24,7 +24,7 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.database;
+package main.java.com.holub.database;
 
 /** A Selector is a Strategy object that is used by
  * {@link Table#select} to determine

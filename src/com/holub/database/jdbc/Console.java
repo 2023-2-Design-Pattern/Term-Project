@@ -24,7 +24,7 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.database.jdbc;
+package main.java.com.holub.database.jdbc;
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -247,10 +247,10 @@ public class Console
 		try
 		{
 			// for mac (mac의 경우 "file:/" -> "file:" 로 변환해준다.)
-			connection = DriverManager.getConnection("file:"+databaseName, "harpo", "swordfish");
+			// connection = DriverManager.getConnection("file:"+databaseName, "harpo", "swordfish");
 
 			// for window
-			// connection = DriverManager.getConnection("file:/"+databaseName, "harpo", "swordfish");
+			connection = DriverManager.getConnection("file:/"+databaseName, "harpo", "swordfish");
 			statement = connection.createStatement();
 		}
 		catch( SQLException e )

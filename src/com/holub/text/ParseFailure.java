@@ -24,7 +24,7 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.text;
+package main.java.com.holub.text;
 
 /** Thrown in the event of a Scanner (or parser) failure
  *

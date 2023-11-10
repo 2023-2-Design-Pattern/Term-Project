@@ -1,8 +1,9 @@
-package com.holub.database;
+package main.java.com.holub.database;
 
 import java.io.*;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class XMLExporterTest {
@@ -12,14 +13,14 @@ public class XMLExporterTest {
 		people.insert(new Object[] { "Holub", "Allen", "1" });
 		people.insert(new Object[] { "Flintstone", "Wilma", "2" });
 
-        Writer out = new FileWriter("c:/dp2023/people.xml");
+        Writer out = new FileWriter("Dbase/people.xml");
         people.export(new XMLExporter(out));
         out.close();
         
         StringBuilder contentBuilder = new StringBuilder();
         
         try {
-            BufferedReader in = new BufferedReader(new FileReader("c:/dp2023/people.xml"));
+            BufferedReader in = new BufferedReader(new FileReader("Dbase/people.xml"));
             String str;
             while ((str = in.readLine()) != null) {
                 contentBuilder.append(str);

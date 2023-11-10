@@ -24,10 +24,7 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.text;
-
-import java.util.*;
-import java.util.regex.*;
+package main.java.com.holub.text;
 
 /** Recognize a token that looks like a word. The match
  *  is case insensitive. To be recognized, the input

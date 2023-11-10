@@ -24,7 +24,7 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.text;
+package main.java.com.holub.text;
 
 /***
  *  An input token (a lexical symbol in the input stream).

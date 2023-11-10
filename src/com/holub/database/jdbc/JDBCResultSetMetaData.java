@@ -24,13 +24,15 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.database.jdbc;
+package main.java.com.holub.database.jdbc;
 
 import java.sql.*;
-import java.util.*;
 
 import com.holub.database.*;
 import com.holub.database.jdbc.adapters.*;
+
+import main.java.com.holub.database.Cursor;
+import main.java.com.holub.database.jdbc.adapters.ResultSetMetaDataAdapter;
 
 /** A limited version of the result-set metadata class. All methods
  *  not shown throw a {@link SQLException} if called.

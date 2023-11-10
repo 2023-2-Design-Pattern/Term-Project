@@ -24,18 +24,18 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.database;
+package main.java.com.holub.database;
 
 import java.util.*;
 import java.io.*;
 import java.text.NumberFormat;
 import java.net.URI;
 
-import com.holub.text.Token;
-import com.holub.text.TokenSet;
-import com.holub.text.Scanner;
-import com.holub.text.ParseFailure;
-import com.holub.tools.ThrowableContainer;
+import main.java.com.holub.text.Token;
+import main.java.com.holub.text.TokenSet;
+import main.java.com.holub.text.Scanner;
+import main.java.com.holub.text.ParseFailure;
+import main.java.com.holub.tools.ThrowableContainer;
 
 /***
  *  This class implements a small SQL-subset database.
@@ -417,7 +417,7 @@ public final class Database
 		IDENTIFIER	= tokens.create( "[a-zA-Z_0-9/\\\\:~]+"		); //{=Database.lastToken}
 
 	private String  expression;	// SQL expression being parsed
-	private Scanner in;			// The current scanner.
+	private main.java.com.holub.text.Scanner in;			// The current scanner.
 
 	// Enums to identify operators not recognized at the token level
 	// These are used by various inner classes, but must be declared
@@ -655,7 +655,7 @@ public final class Database
 	 *  	complete statement must be present (you cannot break a long
 	 *  	statement into multiple calls), and text
 	 *  	following the SQL statement is ignored.
-	 *  @throws com.holub.text.ParseFailure if the SQL is corrupt.
+	 *  @throws ParseFailure if the SQL is corrupt.
 	 *  @throws IOException Database files couldn't be accessed or created.
 	 *  @see #affectedRows()
 	 */

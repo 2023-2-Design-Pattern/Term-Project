@@ -24,7 +24,7 @@
  *    caused by bugs, including lost productivity or data)
  *    in any of this code.
  */
-package com.holub.tools;
+package main.java.com.holub.tools;
 
 /** A convenient container for realying a checked Exception
  *  from a method that can't declare a throws clause to
