@@ -416,7 +416,7 @@ import com.holub.tools.ArrayIterator;
 			if (where.approve(envelope))
 				resultTable.insert((Object[]) currentRow.cloneRow());
 		}
-		return new UnmodifiableTable(resultTable);
+		return resultTable;
 	}
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -438,7 +438,7 @@ import com.holub.tools.ArrayIterator;
 				resultTable.insert(newRow);
 			}
 		}
-		return new UnmodifiableTable(resultTable);
+		return resultTable;
 	}
 
 	/**
@@ -481,7 +481,7 @@ import com.holub.tools.ArrayIterator;
 
 		selectFromCartesianProduct(0, where, requestedColumns, allTables, envelope, resultTable);
 
-		return new UnmodifiableTable(resultTable);
+		return resultTable;
 	}
 
 	/**
@@ -591,6 +591,35 @@ import com.holub.tools.ArrayIterator;
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	public Table select(Selector where, Collection requestedColumns) {
 		return select(where, requestedColumns, null);
+	}
+
+	public Table select(Selector where, Collection requestedColumns, Collection other, QueryOptions queryOptions) {
+		Table resultTable = select(where, requestedColumns, other);
+
+		if(queryOptions.isDistinct()) {
+			resultTable = distinct(resultTable);
+		}
+
+		return new UnmodifiableTable(resultTable);
+	}
+
+	private Table distinct(Table table) {
+		ArrayList<String> cols = new ArrayList<>();
+		for(int i = 0; i < table.rows().columnCount(); i++) {
+			cols.add(table.rows().columnName(i));
+		}
+		String[] copyColumnNames = cols.toArray(new String[cols.size()]);
+
+		Table resultTable = new ConcreteTable(null, copyColumnNames);
+		Set<Results> uniqueRows = new HashSet<>();
+		Results currentRow = (Results) table.rows();
+
+		while (currentRow.advance()) {
+			if(uniqueRows.add(currentRow)) {
+				resultTable.insert((Object[]) currentRow.cloneRow());
+			}
+		}
+		return resultTable;
 	}
 
 	// @select-end

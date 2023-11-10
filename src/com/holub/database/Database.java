@@ -1446,7 +1446,7 @@ public final class Database
 			};
 
 		try
-		{	Table result = primary.select(selector, columns, participantsInJoin);
+		{	Table result = primary.select(selector, columns, participantsInJoin, queryOptions);
 
 			// If this is a "SELECT INTO <table>" request, remove the 
 			// returned table from the UnmodifiableTable wrapper, give
