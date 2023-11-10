@@ -94,6 +94,7 @@ import com.holub.tools.ArrayIterator;
 
 	// @simple-construction-end
 	//
+
 	/**********************************************************************
 	 * Create a table using an importer. See {@link CSVImporter} for an example.
 	 */
@@ -611,12 +612,25 @@ import com.holub.tools.ArrayIterator;
 		String[] copyColumnNames = cols.toArray(new String[cols.size()]);
 
 		Table resultTable = new ConcreteTable(null, copyColumnNames);
-		Set<Results> uniqueRows = new HashSet<>();
+
+		ArrayList<Object[]> uniqueRows = new ArrayList<>();
 		Results currentRow = (Results) table.rows();
 
 		while (currentRow.advance()) {
-			if(uniqueRows.add(currentRow)) {
-				resultTable.insert((Object[]) currentRow.cloneRow());
+			boolean isDuplicate = false;
+			for(int i = 0; i < uniqueRows.size(); i++) {
+				for (int j = 0; j < currentRow.columnCount(); j++) {
+					if (!uniqueRows.get(i)[j].equals(currentRow.column(copyColumnNames[j])))
+						break;
+					if (j == currentRow.columnCount() - 1)
+						isDuplicate = true;
+				}
+				if(isDuplicate)
+					break;
+			}
+			if(!isDuplicate) {
+				uniqueRows.add(currentRow.cloneRow());
+				resultTable.insert(currentRow.cloneRow());
 			}
 		}
 		return resultTable;
