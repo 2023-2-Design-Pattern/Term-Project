@@ -1,18 +1,12 @@
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 
+version = "1.0"
 group = 'com.holub'
-version = '1.0'
 
-sourceCompatibility = 1.8
+
+sourceCompatibility = 1.8 // java 8
 targetCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-}
 
 java {
     withSourcesJar()
@@ -22,12 +16,10 @@ java {
 publishing {
     publications {
         maven(MavenPublication) {
+            groupId project.group
+            artifactId project.name
+            version project.version
             from components.java
         }
     }
-}
-
-wrapper {
-    gradleVersion = "7.3.3"
-    distributionType = Wrapper.DistributionType.ALL
 }
