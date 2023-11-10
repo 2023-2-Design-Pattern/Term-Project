@@ -1,25 +1,23 @@
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-
-version = "1.0"
-group = 'com.holub'
-
-
-sourceCompatibility = 1.8 // java 8
-targetCompatibility = 1.8
-
-java {
-    withSourcesJar()
-    withJavadocJar()
+plugins {
+    id 'java'
 }
 
+apply plugin: 'maven-publish'
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId project.group
-            artifactId project.name
-            version project.version
+            groupId 'com.holub'
+            artifactId 'holub-sql-module'
+            version '0.1'
             from components.java
         }
     }
+}
+// maven-publish 추가 끝
+
+group 'holub-sql-module'
+version '1.0'
+
+repositories {
+    mavenCentral()
 }
