@@ -600,6 +600,9 @@ import com.holub.tools.ArrayIterator;
 		if(queryOptions.isDistinct()) {
 			resultTable = distinct(resultTable);
 		}
+		if(queryOptions.isOrderBy()) {
+			resultTable = orderBy(resultTable, queryOptions.getOrderByColumns());
+		}
 
 		return new UnmodifiableTable(resultTable);
 	}
@@ -633,6 +636,18 @@ import com.holub.tools.ArrayIterator;
 				resultTable.insert(currentRow.cloneRow());
 			}
 		}
+		return resultTable;
+	}
+
+	private Table orderBy(Table table, List orderByColumns) {
+		ArrayList<String> cols = new ArrayList<>();
+		for(int i = 0; i < table.rows().columnCount(); i++) {
+			cols.add(table.rows().columnName(i));
+		}
+		String[] copyColumnNames = cols.toArray(new String[cols.size()]);
+
+		Table resultTable = new ConcreteTable(null, copyColumnNames);
+
 		return resultTable;
 	}
 

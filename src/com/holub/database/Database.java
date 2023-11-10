@@ -818,6 +818,13 @@ public final class Database
 
 			Expression where = (in.matchAdvance(WHERE) == null)
 								? null : expr();
+
+			if( in.matchAdvance(ORDER_BY) != null )
+			{
+				queryOptions.setOrderBy();
+				queryOptions.setOrderByColumns(idList());
+			}
+
 			Table result = doSelect(columns, into,
 								requestedTableNames, where, queryOptions );
 			return result;
