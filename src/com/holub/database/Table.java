@@ -240,6 +240,8 @@ public interface Table extends Serializable, Cloneable
 	 */
 	Table select(Selector where, Collection requestedColumns );
 
+	Table select(Selector where, Collection requestedColumns, Collection other, QueryOptions queryOptions);
+
 	/** Return an iterator across the rows of the current table.
 	 */
 	Cursor rows();

@@ -94,6 +94,7 @@ import com.holub.tools.ArrayIterator;
 
 	// @simple-construction-end
 	//
+
 	/**********************************************************************
 	 * Create a table using an importer. See {@link CSVImporter} for an example.
 	 */
@@ -416,7 +417,7 @@ import com.holub.tools.ArrayIterator;
 			if (where.approve(envelope))
 				resultTable.insert((Object[]) currentRow.cloneRow());
 		}
-		return new UnmodifiableTable(resultTable);
+		return resultTable;
 	}
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -438,7 +439,7 @@ import com.holub.tools.ArrayIterator;
 				resultTable.insert(newRow);
 			}
 		}
-		return new UnmodifiableTable(resultTable);
+		return resultTable;
 	}
 
 	/**
@@ -481,7 +482,7 @@ import com.holub.tools.ArrayIterator;
 
 		selectFromCartesianProduct(0, where, requestedColumns, allTables, envelope, resultTable);
 
-		return new UnmodifiableTable(resultTable);
+		return resultTable;
 	}
 
 	/**
@@ -591,6 +592,96 @@ import com.holub.tools.ArrayIterator;
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	public Table select(Selector where, Collection requestedColumns) {
 		return select(where, requestedColumns, null);
+	}
+
+	public Table select(Selector where, Collection requestedColumns, Collection other, QueryOptions queryOptions) {
+		Table resultTable = select(where, requestedColumns, other);
+
+		if(queryOptions.isDistinct()) {
+			resultTable = distinct(resultTable);
+		}
+		if(queryOptions.isOrderBy()) {
+			resultTable = orderBy(resultTable, queryOptions.getOrderByColumns());
+		}
+
+		return new UnmodifiableTable(resultTable);
+	}
+
+	private Table distinct(Table table) {
+		ArrayList<String> cols = new ArrayList<>();
+		for(int i = 0; i < table.rows().columnCount(); i++) {
+			cols.add(table.rows().columnName(i));
+		}
+		String[] copyColumnNames = cols.toArray(new String[cols.size()]);
+
+		Table resultTable = new ConcreteTable(null, copyColumnNames);
+
+		ArrayList<Object[]> uniqueRows = new ArrayList<>();
+		Results currentRow = (Results) table.rows();
+
+		while (currentRow.advance()) {
+			boolean isDuplicate = false;
+			for(int i = 0; i < uniqueRows.size(); i++) {
+				for (int j = 0; j < currentRow.columnCount(); j++) {
+					if (!uniqueRows.get(i)[j].equals(currentRow.column(copyColumnNames[j])))
+						break;
+					if (j == currentRow.columnCount() - 1)
+						isDuplicate = true;
+				}
+				if(isDuplicate)
+					break;
+			}
+			if(!isDuplicate) {
+				uniqueRows.add(currentRow.cloneRow());
+				resultTable.insert(currentRow.cloneRow());
+			}
+		}
+		return resultTable;
+	}
+
+	private Table orderBy(Table table, List orderByColumns) {
+		ArrayList<String> cols = new ArrayList<>();
+		for(int i = 0; i < table.rows().columnCount(); i++) {
+			cols.add(table.rows().columnName(i));
+		}
+		String[] copyColumnNames = cols.toArray(new String[cols.size()]);
+
+		int[] orderByColumnIndex = new int[orderByColumns.size()];
+		for(int i = 0; i < orderByColumns.size(); i++) {
+			for(int j = 0; j < copyColumnNames.length; j++) {
+				if (orderByColumns.get(i).equals(copyColumnNames[j])) {
+					orderByColumnIndex[i] = j;
+					break;
+				}
+			}
+		}
+
+		Table resultTable = new ConcreteTable(null, copyColumnNames);
+		LinkedList<Object[]> copyRowSet = new LinkedList<>();
+		Results copyRow = (Results) table.rows();
+
+		while(copyRow.advance()) {
+			copyRowSet.add(copyRow.cloneRow());
+		}
+
+		Comparator<Object[]> comparator = (o1, o2) -> {
+			for (int index : orderByColumnIndex) {
+				Comparable<Object> value1 = (Comparable<Object>) o1[index];
+				Comparable<Object> value2 = (Comparable<Object>) o2[index];
+				int result = value1.compareTo(value2);
+				if (result != 0) {
+					return result;
+				}
+			}
+			return 0;
+		};
+
+		copyRowSet.sort(comparator);
+
+		for (Object[] objects : copyRowSet) {
+			resultTable.insert(objects);
+		}
+		return resultTable;
 	}
 
 	// @select-end
