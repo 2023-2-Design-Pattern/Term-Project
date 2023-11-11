@@ -646,8 +646,41 @@ import com.holub.tools.ArrayIterator;
 		}
 		String[] copyColumnNames = cols.toArray(new String[cols.size()]);
 
-		Table resultTable = new ConcreteTable(null, copyColumnNames);
+		int[] orderByColumnIndex = new int[orderByColumns.size()];
+		for(int i = 0; i < orderByColumns.size(); i++) {
+			for(int j = 0; j < copyColumnNames.length; j++) {
+				if (orderByColumns.get(i).equals(copyColumnNames[j])) {
+					orderByColumnIndex[i] = j;
+					break;
+				}
+			}
+		}
 
+		Table resultTable = new ConcreteTable(null, copyColumnNames);
+		LinkedList<Object[]> copyRowSet = new LinkedList<>();
+		Results copyRow = (Results) table.rows();
+
+		while(copyRow.advance()) {
+			copyRowSet.add(copyRow.cloneRow());
+		}
+
+		Comparator<Object[]> comparator = (o1, o2) -> {
+			for (int index : orderByColumnIndex) {
+				Comparable<Object> value1 = (Comparable<Object>) o1[index];
+				Comparable<Object> value2 = (Comparable<Object>) o2[index];
+				int result = value1.compareTo(value2);
+				if (result != 0) {
+					return result;
+				}
+			}
+			return 0;
+		};
+
+		copyRowSet.sort(comparator);
+
+		for (Object[] objects : copyRowSet) {
+			resultTable.insert(objects);
+		}
 		return resultTable;
 	}
 
