@@ -27,13 +27,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class JDBCPreparedStatement extends StatementAdapter{
+public class JDBCPreparedStatement extends JDBCStatement{
     private Database database;
     private List<String> sql_batch = new ArrayList<>();
     private String sqlQuery;
 
     public JDBCPreparedStatement(Database database, String sql)
-    {	this.database = database;
+    {
+        super(database);
+        this.database = database;
     	this.sqlQuery = sql;
     }
     
@@ -57,7 +59,6 @@ public class JDBCPreparedStatement extends StatementAdapter{
     public void clearBatch() throws SQLException {
     	sql_batch.clear();
     }
-    
     // need to write own executeUpdate()
 
 }

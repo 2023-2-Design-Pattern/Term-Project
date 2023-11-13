@@ -44,7 +44,8 @@ public class JDBCTest
 	private static Statement  statement  = null;
 
 	public static boolean batchExecution(String sql, String[] datas) throws Exception{
-		int count[] = new int[datas.length];
+		int[] count = new int[datas.length];
+		boolean result = true;
 
 		try {
 			connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
@@ -53,9 +54,9 @@ public class JDBCTest
 			// autoCommit off
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(sql);		// sql + "(?, ?, ?, ?, ?)" 
-			for (int i =0;  i <datas.length; i++){
-				statement.addBatch(datas[i]);					// PreparedStatement - addBatch()
-				// System.out.println(sql+datas[i]);
+			for (String s : datas) {
+				statement.addBatch(s);                    // PreparedStatement - addBatch()
+				System.out.println("statement test: "+sql+s);
 			}
 			count = statement.executeBatch();
 			connection.commit();
@@ -74,12 +75,12 @@ public class JDBCTest
 			}
 			connection.close();
 		}
-		boolean result = true;
 
-		for(int i=0; i<count.length; i++) {
+		for (int j : count) {
+			System.out.println("실행결과: "+j);
 			// over 0, -2 success
-			if(count[i] < 0) {
-				if (count[i] != -2)
+			if (j < 0) {
+				if (j != -2)
 					result = false;
 				break;
 			}
@@ -91,15 +92,15 @@ public class JDBCTest
 	{
 		Class.forName( "com.holub.database.jdbc.JDBCDriver" ) //{=JDBCTest.forName}
 												.newInstance();
-		
+		boolean result = batchExecution("insert into test VALUES ", data);
+		System.out.println("result:" + result);
+
+		/*
 		try
 		{	connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
 							"file:/c:/src/com/holub/database/jdbc/Dbase",
 							"harpo", "swordfish" );
-			
-			batchExecution("insert into test VALUES ", data);
-			
-			/*
+
 			statement = connection.createStatement();
 		
 			statement.executeUpdate(
@@ -113,8 +114,11 @@ public class JDBCTest
 				 ")"
 			);
 
+
+
+
 			for( int i = 0; i < data.length; ++i )
-				statement.executeUpdate( 
+				statement.executeUpdate(
 						"insert into test VALUES "+ data[i] );
 
 			// Test Autocommit stuff. If everything's working
@@ -122,7 +126,7 @@ public class JDBCTest
 			// but Fred should not.
 
 			connection.setAutoCommit( false );
-			statement.executeUpdate( 
+			statement.executeUpdate(
 						"insert into test VALUES "+
 						"(4, 'James',  'Thu', 1, 'Cappuccino')" );
 			connection.commit();
@@ -144,12 +148,12 @@ public class JDBCTest
 					+ result.getString("Type")
 				);
 			}
-			*/
+
 		}
 		finally
 		{
 		  try{ if(statement != null) statement.close(); }catch(Exception e){}
 		  try{ if(connection!= null) connection.close();}catch(Exception e){}
-		}
+		}*/
 	}
 }
