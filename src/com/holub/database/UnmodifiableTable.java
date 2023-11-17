@@ -95,6 +95,9 @@ public class UnmodifiableTable implements Table
 	public Table select(Selector w, Collection r)
 	{	return wrapped.select(w, r);
 	}
+	public Table select(Selector w, Collection r, Collection o, QueryOptions op)
+	{	return wrapped.select(w, r, o, op);
+	}
 	public Cursor rows()
 	{	return wrapped.rows();
 	}
