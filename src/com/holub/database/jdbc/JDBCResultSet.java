@@ -26,6 +26,7 @@
  */
 package com.holub.database.jdbc;
 
+import java.io.Serializable;
 import java.sql.*;
 import java.text.*;
 
@@ -44,7 +45,7 @@ import com.holub.database.jdbc.adapters.*;
  * @include /etc/license.txt
  */
 
-public class JDBCResultSet extends ResultSetAdapter
+public class JDBCResultSet extends ResultSetAdapter implements Serializable
 {
 	private 	   final Cursor cursor;
 	private static final NumberFormat  format =

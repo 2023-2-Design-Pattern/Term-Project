@@ -1,14 +1,33 @@
 package com.holub;
 
+import com.holub.database.jdbc.JDBCResultSet;
 import com.holub.rmi.HolubInterface;
 import com.holub.rmi.serialobject.SerializableTest;
 
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.*;
 
 public class RMIServer implements HolubInterface {
-    public RMIServer() {}
+    Connection connection = null;
+
+    public RMIServer() {
+        JDBCConnect();
+    }
+
+    private void JDBCConnect() {
+        try {
+            Class.forName( "com.holub.database.jdbc.JDBCDriver" ) //{=JDBCTest.forName}
+                    .newInstance();
+            connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
+                    "file:/c:/src/com/holub/database/jdbc/Dbase",
+                    "harpo", "swordfish" );
+        } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public String testMethod() {
@@ -19,6 +38,19 @@ public class RMIServer implements HolubInterface {
     public SerializableTest testSerializable(String userId, String userName) {
         SerializableTest serial = new SerializableTest(userId, userName);
         return serial;
+    }
+
+    @Override
+    public JDBCResultSet executeQuery(String sqlQuery) throws RemoteException {
+        try {
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(sqlQuery);
+            return (JDBCResultSet) result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static void main(String args[]) {
