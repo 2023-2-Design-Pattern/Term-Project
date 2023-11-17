@@ -22,7 +22,7 @@ public class RMIServer implements HolubInterface {
             Class.forName( "com.holub.database.jdbc.JDBCDriver" ) //{=JDBCTest.forName}
                     .newInstance();
             connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
-                    "file:/c:/src/com/holub/database/jdbc/Dbase",
+                    "file:/C:/dp2023",
                     "harpo", "swordfish" );
         } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
@@ -60,6 +60,8 @@ public class RMIServer implements HolubInterface {
 
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.rebind("RMITest", stub);
+
+            System.out.println("RMI server start");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -16,10 +16,13 @@ public class RMIClientTest {
             Registry registry = LocateRegistry.getRegistry("localhost", 1099);
             HolubInterface service = (HolubInterface) registry.lookup("RMITest");
 
-            System.out.println(service.testMethod());
+            //System.out.println(service.testMethod());
 
-            SerializableTest serial = service.testSerializable("testId", "testName");
-            System.out.println(serial.userId + " " + serial.userName);
+            //SerializableTest serial = service.testSerializable("testId", "testName");
+            //System.out.println(serial.userId + " " + serial.userName);
+            System.out.println("Test");
+            System.out.println(service.executeQuery("select one from existing"));
+            System.out.println(service.executeQuery("select one from existing").getMetaData());
         } catch (Exception e) {
             e.printStackTrace();
         }

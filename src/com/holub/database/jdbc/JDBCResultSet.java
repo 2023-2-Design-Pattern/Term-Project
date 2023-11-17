@@ -47,7 +47,7 @@ import com.holub.database.jdbc.adapters.*;
 
 public class JDBCResultSet extends ResultSetAdapter implements Serializable
 {
-	private 	   final Cursor cursor;
+	private final Cursor cursor;
 	private static final NumberFormat  format =
 								NumberFormat.getInstance();
 
