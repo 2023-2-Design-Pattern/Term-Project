@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 
 public class XMLExporterTest {
 	@Test
-    public void HTML() throws IOException {
+    public void XML() throws IOException {
 		Table people = TableFactory.create("people", new String[] { "last", "first", "addrId" });
 		people.insert(new Object[] { "Holub", "Allen", "1" });
 		people.insert(new Object[] { "Flintstone", "Wilma", "2" });
