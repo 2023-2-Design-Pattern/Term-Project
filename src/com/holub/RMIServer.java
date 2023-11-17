@@ -53,6 +53,19 @@ public class RMIServer implements HolubInterface {
         }
     }
 
+    @Override
+    public int executeUpdate(String sqlString) throws RemoteException {
+        try {
+            Statement statement = connection.createStatement();
+
+            int result = statement.executeUpdate(sqlString);
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
     public static void main(String args[]) {
         try {
             RMIServer server = new RMIServer();

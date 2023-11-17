@@ -10,4 +10,5 @@ public interface HolubInterface extends Remote {
     public String testMethod() throws RemoteException;
     public SerializableTest testSerializable(String userId, String userName) throws RemoteException;
     public JDBCResultSet executeQuery(String sqlQuery) throws RemoteException;
+    public int executeUpdate(String sqlString) throws RemoteException;
 }

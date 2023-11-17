@@ -21,8 +21,10 @@ public class RMIClientTest {
             //SerializableTest serial = service.testSerializable("testId", "testName");
             //System.out.println(serial.userId + " " + serial.userName);
             System.out.println("Test");
-            System.out.println(service.executeQuery("select one from existing"));
-            System.out.println(service.executeQuery("select one from existing").getMetaData());
+            //System.out.println(service.executeQuery("select one from existing"));
+            //System.out.println(service.executeQuery("select one from existing").getMetaData());
+            service.executeUpdate("insert into existing VALUES "+
+                    "('dooo', 'whap',  'choo')");
         } catch (Exception e) {
             e.printStackTrace();
         }
