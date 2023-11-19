@@ -7,6 +7,7 @@ public class QueryOptions {
     private boolean orderBy = false;
 
     private List orderByColumns;
+    private boolean orderByASC = false;
 
     public QueryOptions() {
     }
@@ -33,5 +34,13 @@ public class QueryOptions {
 
     public void setOrderByColumns(List orderByColumns) {
         this.orderByColumns = orderByColumns;
+    }
+
+    public boolean isOrderByASC() {
+        return orderByASC;
+    }
+
+    public void setOrderByASC(boolean bool) {
+        this.orderByASC = bool;
     }
 }

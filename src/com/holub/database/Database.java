@@ -417,6 +417,8 @@ public final class Database
 		//additional token
 		DISTINCT	= tokens.create( "'DISTINCT" ),
 		ORDER_BY	= tokens.create( "'ORDER BY" ),
+		ASC			= tokens.create( "'ASC" ),
+		DESC		= tokens.create( "'DESC" ),
 
 		IDENTIFIER	= tokens.create( "[a-zA-Z_0-9/\\\\:~]+"		); //{=Database.lastToken}
 
@@ -823,6 +825,14 @@ public final class Database
 			{
 				queryOptions.setOrderBy();
 				queryOptions.setOrderByColumns(idList());
+
+				if ( in.matchAdvance(DESC) != null ) {
+					queryOptions.setOrderByASC(false);
+				} else if ( in.matchAdvance(ASC) != null ) {
+					queryOptions.setOrderByASC(true);
+				} else {
+					queryOptions.setOrderByASC(true);
+				}
 			}
 
 			Table result = doSelect(columns, into,
