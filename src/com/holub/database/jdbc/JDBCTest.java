@@ -51,6 +51,21 @@ public class JDBCTest
 			connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
 					"file:/c:/src/com/holub/database/jdbc/Dbase",
 					"harpo", "swordfish" );
+//			statement = connection.createStatement();
+
+			statement.executeUpdate(
+					"create table test (" +
+							"  Entry      INTEGER      NOT NULL"   +
+							", Customer   VARCHAR (20) NOT NULL"   +
+							", DOW        VARCHAR (3)  NOT NULL"   +
+							", Cups       INTEGER      NOT NULL"   +
+							", Type       VARCHAR (10) NOT NULL"   +
+							", PRIMARY KEY( Entry )"               +
+							")"
+			);
+//			for( int i = 0; i < data.length; ++i )
+//				statement.executeUpdate(
+//						"insert into test VALUES "+ data[i] );
 			// autoCommit off
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(sql);		// sql + "(?, ?, ?, ?, ?)" 
@@ -92,10 +107,8 @@ public class JDBCTest
 	{
 		Class.forName( "com.holub.database.jdbc.JDBCDriver" ) //{=JDBCTest.forName}
 												.newInstance();
-		boolean result = batchExecution("insert into test VALUES ", data);
-		System.out.println("result:" + result);
-
-		/*
+		//boolean result = batchExecution("insert into test VALUES ", data);
+		//System.out.println("result:" + result);
 		try
 		{	connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
 							"file:/c:/src/com/holub/database/jdbc/Dbase",
@@ -113,9 +126,6 @@ public class JDBCTest
 				 ", PRIMARY KEY( Entry )"               +
 				 ")"
 			);
-
-
-
 
 			for( int i = 0; i < data.length; ++i )
 				statement.executeUpdate(
@@ -148,12 +158,11 @@ public class JDBCTest
 					+ result.getString("Type")
 				);
 			}
-
 		}
 		finally
 		{
 		  try{ if(statement != null) statement.close(); }catch(Exception e){}
 		  try{ if(connection!= null) connection.close();}catch(Exception e){}
-		}*/
+		}
 	}
 }
