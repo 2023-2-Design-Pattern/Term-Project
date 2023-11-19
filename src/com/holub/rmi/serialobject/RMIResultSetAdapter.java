@@ -4,15 +4,13 @@ import com.holub.database.Cursor;
 import com.holub.database.jdbc.JDBCResultSet;
 import com.holub.database.jdbc.adapters.ResultSetAdapter;
 
+import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.ListIterator;
 
-public class RMIResultSetAdapter extends ResultSetAdapter {
-    LinkedList<Object[]> rowSet = new LinkedList<Object[]>();
-    ListIterator<Object[]> rowSetIterator;
-    private Object[] row = null;
+public class RMIResultSetAdapter extends ResultSetAdapter implements Serializable {
+    public LinkedList<Object[]> rowSet = new LinkedList<Object[]>();
 
-    RMIResultSetAdapter(JDBCResultSet rs) {
+    public RMIResultSetAdapter(JDBCResultSet rs) {
         Cursor cursor = rs.getCursor();
         while (cursor.advance()) {
             Object[] copyRow = new Object[cursor.columnCount()];
@@ -21,14 +19,5 @@ public class RMIResultSetAdapter extends ResultSetAdapter {
             }
             rowSet.add(copyRow);
         }
-        rowSetIterator = rowSet.listIterator();
-    }
-
-    public boolean next() {
-        if (rowSetIterator.hasNext()) {
-            row = (Object[]) rowSetIterator.next();
-            return true;
-        }
-        return false;
     }
 }

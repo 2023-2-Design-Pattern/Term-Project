@@ -2,6 +2,7 @@ package com.holub;
 
 import com.holub.database.jdbc.JDBCResultSet;
 import com.holub.rmi.HolubInterface;
+import com.holub.rmi.serialobject.RMIResultSetAdapter;
 import com.holub.rmi.serialobject.SerializableTest;
 
 import java.rmi.RemoteException;
@@ -41,12 +42,12 @@ public class RMIServer implements HolubInterface {
     }
 
     @Override
-    public JDBCResultSet executeQuery(String sqlQuery) throws RemoteException {
+    public RMIResultSetAdapter executeQuery(String sqlQuery) throws RemoteException {
         try {
             Statement statement = connection.createStatement();
 
             ResultSet result = statement.executeQuery(sqlQuery);
-            return (JDBCResultSet) result;
+            return new RMIResultSetAdapter((JDBCResultSet) result);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
