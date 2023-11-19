@@ -59,6 +59,10 @@ public class JDBCResultSet extends ResultSetAdapter
 	{	this.cursor = cursor;
 	}
 
+	public Cursor getCursor() {
+		return cursor;
+	}
+
 	public boolean next()
 	{	return cursor.advance();
 	}
