@@ -601,7 +601,7 @@ import com.holub.tools.ArrayIterator;
 			resultTable = distinct(resultTable);
 		}
 		if(queryOptions.isOrderBy()) {
-			resultTable = orderBy(resultTable, queryOptions.getOrderByColumns());
+			resultTable = orderBy(resultTable, queryOptions.getOrderByColumns(), queryOptions.isOrderByASC());
 		}
 
 		return new UnmodifiableTable(resultTable);
@@ -639,7 +639,7 @@ import com.holub.tools.ArrayIterator;
 		return resultTable;
 	}
 
-	private Table orderBy(Table table, List orderByColumns) {
+	private Table orderBy(Table table, List orderByColumns, boolean ascending) {
 		ArrayList<String> cols = new ArrayList<>();
 		for(int i = 0; i < table.rows().columnCount(); i++) {
 			cols.add(table.rows().columnName(i));
@@ -669,6 +669,9 @@ import com.holub.tools.ArrayIterator;
 				Comparable<Object> value1 = (Comparable<Object>) o1[index];
 				Comparable<Object> value2 = (Comparable<Object>) o2[index];
 				int result = value1.compareTo(value2);
+				if (!ascending) {
+					result = -result;
+				}
 				if (result != 0) {
 					return result;
 				}
