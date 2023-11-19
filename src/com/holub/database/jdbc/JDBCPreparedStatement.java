@@ -38,27 +38,6 @@ public class JDBCPreparedStatement extends JDBCStatement{
         this.database = database;
     	this.sqlQuery = sql;
     }
-    
-	public void addBatch(String data) throws SQLException {
-        sql_batch.add(data);
-    }
-    public int[] executeBatch() throws SQLException {
-        int count[] = new int[sql_batch.size()];
-        int cnt=0;
-        try
-        {
-            for(String data : sql_batch){
-                count[cnt] = executeUpdate(sqlQuery+data);
-                cnt++;
-            }
-            return count;
-        }catch(Exception e){
-            throw new SQLException(e.getMessage());
-        }
-    }
-    public void clearBatch() throws SQLException {
-    	sql_batch.clear();
-    }
     // need to write own executeUpdate()
 
 }

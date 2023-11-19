@@ -37,12 +37,19 @@ import com.holub.database.jdbc.adapters.*;
 /***
  * @include /etc/license.txt
  */
-
 public class JDBCStatement extends StatementAdapter
-{	private Database database;
+{
+	private Database database;
+	private static List<String> sql_batch = new ArrayList<>();
+	protected volatile JDBCConnection connection = null;
 
 	public JDBCStatement(Database database)
 	{	this.database = database;
+	}
+
+	public JDBCStatement(JDBCConnection c, Database database) throws SQLException{
+		this.connection = c;
+		this.database =database;
 	}
   
 	public int executeUpdate(String sqlString) throws SQLException
@@ -67,4 +74,55 @@ public class JDBCStatement extends StatementAdapter
 	public void close() throws SQLException
 	{	// does nothing.
 	}
+
+	public void addBatch(String sql) throws SQLException {
+		//synchronized (checkClosed().getConnectionMutex()){
+			if (sql != null){
+				sql_batch.add(sql);
+			}
+		//}
+	}
+
+	public int[] executeBatch() throws SQLException {
+		int updateCounts[] = null;
+		//new int[sql_batch.size()];
+
+		try {
+			if (sql_batch != null) {
+				int nbrCommands = sql_batch.size();
+				for (int i = 0; i < nbrCommands; i++) {
+					updateCounts[i] = EXECUTE_FAILED; // set error value(-3)
+				}
+				int commandIndex = 0;
+
+				for (commandIndex = 0; commandIndex < nbrCommands; commandIndex++) {
+					try {
+						String sql = sql_batch.get(commandIndex);
+						updateCounts[commandIndex] = executeUpdate(sql);
+					} catch (SQLException ex) {
+						updateCounts[commandIndex] = EXECUTE_FAILED;
+					}
+				}
+			}
+			return updateCounts != null ? updateCounts : new int[0];
+		}catch (Exception e) {
+			throw new SQLException(e.getMessage());
+		}finally {
+			clearBatch();
+		}
+	}
+
+	public void clearBatch() throws SQLException {
+		sql_batch.clear();
+	}
+
+	protected JDBCConnection checkClosed() throws SQLException {
+		JDBCConnection c = this.connection;
+
+		if (c == null){
+			throw new SQLException("Statement.AlreadyClosed");
+		}
+		return c;
+	}
+
 }
