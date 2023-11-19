@@ -5,10 +5,11 @@ import com.holub.database.jdbc.JDBCResultSet;
 import com.holub.database.jdbc.adapters.ResultSetAdapter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class RMIResultSetAdapter extends ResultSetAdapter implements Serializable {
-    public LinkedList<Object[]> rowSet = new LinkedList<Object[]>();
+    public ArrayList<Object[]> rowSet = new ArrayList<>();
 
     public RMIResultSetAdapter(JDBCResultSet rs) {
         Cursor cursor = rs.getCursor();
