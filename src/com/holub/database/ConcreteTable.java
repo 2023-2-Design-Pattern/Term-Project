@@ -203,7 +203,7 @@ import com.holub.tools.ArrayIterator;
 	}
 
 	// ----------------------------------------------------------------------
-	private final class Results implements Cursor, Serializable {
+	private final class Results implements Cursor {
 		private final Iterator rowIterator;
 		private Object[] row = null;
 
