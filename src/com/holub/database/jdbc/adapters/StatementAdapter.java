@@ -25,6 +25,8 @@
  *    in any of this code.
  */
 package com.holub.database.jdbc.adapters;
+import com.holub.database.jdbc.JDBCConnection;
+
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -76,7 +78,8 @@ public SQLWarning getWarnings() throws SQLException {throw new SQLException("Sta
 public void setCursorName(String name) throws SQLException {throw new SQLException("Statement.setCursorName(String name) not supported");}
 public void setEscapeProcessing(boolean enable) throws SQLException {throw new SQLException("Statement.setEscapeProcessing(boolean enable) not supported");}
 public void setMaxFieldSize(int max) throws SQLException {throw new SQLException("Statement.setMaxFieldSize(int max) not supported");}
-public void checkClosed() throws SQLException {throw new SQLException("Statement.checkClosed() not supported");}
+// checkClosed(): public -> protected, void -> JDBCConnection
+protected JDBCConnection checkClosed() throws SQLException {throw new SQLException("Statement.checkClosed() not supported");}
 // adding PreparedStatement
 public <T> T unwrap(Class<T> iface) throws SQLException {throw new SQLException("PreparedStatement.unwrap() not supported");}
 public boolean isWrapperFor(Class<?> iface) throws SQLException {throw new SQLException("PreparedStatement.isWrapperFor() not supported");}
