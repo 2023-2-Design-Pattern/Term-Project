@@ -17,19 +17,28 @@ public class RMIClientTest {
             Registry registry = LocateRegistry.getRegistry("localhost", 1099);
             HolubInterface service = (HolubInterface) registry.lookup("RMITest");
 
-            //System.out.println(service.testMethod());
+            System.out.println("Test Start");
 
-            //SerializableTest serial = service.testSerializable("testId", "testName");
-            //System.out.println(serial.userId + " " + serial.userName);
-            System.out.println("Test");
-            ArrayList arrayList = service.executeQuery("select one from existing").rowSet;
+            System.out.println(service.testMethod());
 
-            for (int i = 0; i < arrayList.size(); i++) {
-                System.out.println(arrayList.get(i));
+            SerializableTest serial = service.testSerializable("testId", "testName");
+            System.out.println(serial.userId + " " + serial.userName);
+
+            ArrayList<Object[]> arrayList = service.executeQuery("select * from existing").rowSet;
+
+            for (Object[] objects : arrayList) {
+                for (int j = 0; j < arrayList.get(0).length; j++) {
+                    System.out.print(objects[j] + " ");
+                }
+                System.out.println();
             }
-            //System.out.println(service.executeQuery("select one from existing").getMetaData());
-            //service.executeUpdate("insert into existing VALUES "+
-            //        "('dooo', 'whap',  'choo')");
+            /*
+            System.out.println(service.executeQuery("select one from existing").getMetaData());
+            service.executeUpdate("insert into existing VALUES "+
+                    "('dooo', 'whap',  'choo')");
+            */
+
+            System.out.println("Test End");
         } catch (Exception e) {
             e.printStackTrace();
         }

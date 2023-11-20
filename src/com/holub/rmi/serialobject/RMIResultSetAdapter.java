@@ -16,7 +16,7 @@ public class RMIResultSetAdapter extends ResultSetAdapter implements Serializabl
         while (cursor.advance()) {
             Object[] copyRow = new Object[cursor.columnCount()];
             for (int i = 0; i < cursor.columnCount(); i++) {
-                copyRow[i] = cursor.columnName(i);
+                copyRow[i] = cursor.column(cursor.columnName(i));
             }
             rowSet.add(copyRow);
         }
