@@ -204,8 +204,12 @@ import com.holub.tools.ArrayIterator;
 
 	// ----------------------------------------------------------------------
 	private final class Results implements Cursor {
-		private final Iterator rowIterator = rowSet.iterator();
+		private final Iterator rowIterator;
 		private Object[] row = null;
+
+		Results() {
+			this.rowIterator = rowSet.iterator();
+		}
 
 		public String tableName() {
 			return ConcreteTable.this.tableName;

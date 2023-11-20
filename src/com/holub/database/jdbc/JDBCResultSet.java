@@ -26,6 +26,7 @@
  */
 package com.holub.database.jdbc;
 
+import java.io.Serializable;
 import java.sql.*;
 import java.text.*;
 
@@ -46,7 +47,7 @@ import com.holub.database.jdbc.adapters.*;
 
 public class JDBCResultSet extends ResultSetAdapter
 {
-	private 	   final Cursor cursor;
+	private final Cursor cursor;
 	private static final NumberFormat  format =
 								NumberFormat.getInstance();
 
@@ -56,6 +57,10 @@ public class JDBCResultSet extends ResultSetAdapter
 	 */
 	public JDBCResultSet(Cursor cursor) throws SQLException
 	{	this.cursor = cursor;
+	}
+
+	public Cursor getCursor() {
+		return cursor;
 	}
 
 	public boolean next()
