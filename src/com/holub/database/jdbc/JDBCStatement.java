@@ -33,7 +33,7 @@ import java.util.List;
 
 import com.holub.database.*;
 import com.holub.database.jdbc.adapters.*;
- 
+
 /***
  * @include /etc/license.txt
  */
@@ -47,11 +47,11 @@ public class JDBCStatement extends StatementAdapter
 	{	this.database = database;
 	}
 
-	public JDBCStatement(JDBCConnection c, Database database) throws SQLException{
+	public JDBCStatement(JDBCConnection c, Database database) {
 		this.connection = c;
 		this.database =database;
 	}
-  
+
 	public int executeUpdate(String sqlString) throws SQLException
 	{	try
 		{	database.execute( sqlString );
@@ -61,7 +61,7 @@ public class JDBCStatement extends StatementAdapter
 		{	throw new SQLException( e.getMessage() );
 		}
 	}
-	
+
 	public ResultSet executeQuery(String sqlQuery) throws SQLException
 	{	try
 		{	Table result = database.execute( sqlQuery );
@@ -84,9 +84,7 @@ public class JDBCStatement extends StatementAdapter
 	}
 
 	public int[] executeBatch() throws SQLException {
-		int updateCounts[] = null;
-		//new int[sql_batch.size()];
-
+		int updateCounts[] = new int[sql_batch.size()];
 		try {
 			if (sql_batch != null) {
 				int nbrCommands = sql_batch.size();
@@ -94,7 +92,6 @@ public class JDBCStatement extends StatementAdapter
 					updateCounts[i] = EXECUTE_FAILED; // set error value(-3)
 				}
 				int commandIndex = 0;
-
 				for (commandIndex = 0; commandIndex < nbrCommands; commandIndex++) {
 					try {
 						String sql = sql_batch.get(commandIndex);
@@ -106,6 +103,7 @@ public class JDBCStatement extends StatementAdapter
 			}
 			return updateCounts != null ? updateCounts : new int[0];
 		}catch (Exception e) {
+			System.out.println("error!");
 			throw new SQLException(e.getMessage());
 		}finally {
 			clearBatch();

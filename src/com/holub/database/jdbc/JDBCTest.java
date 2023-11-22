@@ -35,23 +35,24 @@ import java.sql.*;
 public class JDBCTest
 {
 	static String[] data =
-	{	"(1,  'John',   'Mon', 1, 'JustJoe')",
-		"(2,  'JS',     'Mon', 1, 'Cappuccino')",
-		"(3,  'Marie',  'Mon', 2, 'CaffeMocha')",
-	};
-	
-	private static Connection connection = null;
-	private static Statement  statement  = null;
+			{		"(1,  'John',   'Mon', 1, 'JustJoe')",
+					"(2,  'JS',     'Mon', 1, 'Cappuccino')",
+					"(3,  'Marie',  'Mon', 2, 'CaffeMocha')",
+			};
 
-	public static boolean batchExecution(String sql, String[] datas) throws Exception{
-		int[] count = new int[datas.length];
-		boolean result = true;
+	public static void main(String[] args) throws Exception
+	{
+		Class.forName( "com.holub.database.jdbc.JDBCDriver" ) //{=JDBCTest.forName}
+				.newInstance();
 
-		try {
-			connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
-					"file:/c:/src/com/holub/database/jdbc/Dbase",
-					"harpo", "swordfish" );
-//			statement = connection.createStatement();
+		Connection connection = null;
+		Statement  statement  = null;
+		try
+		{	connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
+				"file:/c:/src/com/holub/database/jdbc/Dbase",
+				"harpo", "swordfish" );
+
+			statement = connection.createStatement();
 
 			statement.executeUpdate(
 					"create table test (" +
@@ -63,69 +64,6 @@ public class JDBCTest
 							", PRIMARY KEY( Entry )"               +
 							")"
 			);
-//			for( int i = 0; i < data.length; ++i )
-//				statement.executeUpdate(
-//						"insert into test VALUES "+ data[i] );
-			// autoCommit off
-			connection.setAutoCommit(false);
-			statement = connection.prepareStatement(sql);		// sql + "(?, ?, ?, ?, ?)" 
-			for (String s : datas) {
-				statement.addBatch(s);                    // PreparedStatement - addBatch()
-				System.out.println("statement test: "+sql+s);
-			}
-			count = statement.executeBatch();
-			connection.commit();
-		} catch (SQLException e){
-			e.printStackTrace();
-			try {
-				connection.rollback();
-			} catch (SQLException e1){
-				e1.printStackTrace();
-			}
-		} finally{
-			try{
-				connection.setAutoCommit(true);
-			}catch (SQLException e){
-				e.printStackTrace();
-			}
-			connection.close();
-		}
-
-		for (int j : count) {
-			System.out.println("실행결과: "+j);
-			// over 0, -2 success
-			if (j < 0) {
-				if (j != -2)
-					result = false;
-				break;
-			}
-		}
-		return result;
-	}
-
-	public static void main(String[] args) throws Exception
-	{
-		Class.forName( "com.holub.database.jdbc.JDBCDriver" ) //{=JDBCTest.forName}
-												.newInstance();
-		//boolean result = batchExecution("insert into test VALUES ", data);
-		//System.out.println("result:" + result);
-		try
-		{	connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
-							"file:/c:/src/com/holub/database/jdbc/Dbase",
-							"harpo", "swordfish" );
-
-			statement = connection.createStatement();
-		
-			statement.executeUpdate(
-				"create table test (" +
-				 "  Entry      INTEGER      NOT NULL"   +
-				 ", Customer   VARCHAR (20) NOT NULL"   +
-				 ", DOW        VARCHAR (3)  NOT NULL"   +
-				 ", Cups       INTEGER      NOT NULL"   +
-				 ", Type       VARCHAR (10) NOT NULL"   +
-				 ", PRIMARY KEY( Entry )"               +
-				 ")"
-			);
 
 			for( int i = 0; i < data.length; ++i )
 				statement.executeUpdate(
@@ -136,13 +74,13 @@ public class JDBCTest
 			// but Fred should not.
 
 			connection.setAutoCommit( false );
-			statement.executeUpdate(
-						"insert into test VALUES "+
-						"(4, 'James',  'Thu', 1, 'Cappuccino')" );
+			statement.addBatch(
+					"insert into test VALUES "+
+							"(4, 'James',  'Thu', 1, 'Cappuccino')" );
+			statement.addBatch(
+					"insert into test (Customer) VALUES('Fred')");
+			int[] batch_result = statement.executeBatch();
 			connection.commit();
-
-			statement.executeUpdate(
-						"insert into test (Customer) VALUES('Fred')");
 			connection.rollback();
 			connection.setAutoCommit( true );
 
@@ -151,18 +89,18 @@ public class JDBCTest
 			ResultSet result = statement.executeQuery( "select * from test" );
 			while( result.next() )
 			{	System.out.println
-				(	  result.getInt("Entry")		+ ", "
-					+ result.getString("Customer")	+ ", "
-					+ result.getString("DOW")		+ ", "
-					+ result.getInt("Cups")			+ ", "
-					+ result.getString("Type")
-				);
+					(	  result.getInt("Entry")		+ ", "
+							+ result.getString("Customer")	+ ", "
+							+ result.getString("DOW")		+ ", "
+							+ result.getInt("Cups")			+ ", "
+							+ result.getString("Type")
+					);
 			}
 		}
 		finally
 		{
-		  try{ if(statement != null) statement.close(); }catch(Exception e){}
-		  try{ if(connection!= null) connection.close();}catch(Exception e){}
+			try{ if(statement != null) statement.close(); }catch(Exception e){}
+			try{ if(connection!= null) connection.close();}catch(Exception e){}
 		}
 	}
 }

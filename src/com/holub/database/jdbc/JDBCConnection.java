@@ -94,7 +94,7 @@ public class JDBCConnection extends ConnectionAdapter
 	}
 
 	public PreparedStatement prepareStatement(String sql) throws SQLException
-	{ 	return new JDBCPreparedStatement(database, sql);	
+	{ 	return new JDBCPreparedStatement(sql, database);
 	// cannot be casted without implements PreparedStatement
 	// need to write overriding methods for PreparedStatement
 	}
