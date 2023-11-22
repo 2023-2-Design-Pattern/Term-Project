@@ -8,6 +8,7 @@ public class JDBCPreparedStatement extends JDBCStatement{
     private Database database;
     private String sqlQuery;
     private JDBCConnection connection;
+    private Query query;
 
     public JDBCPreparedStatement(String sql, Database database)
     {
@@ -20,11 +21,14 @@ public class JDBCPreparedStatement extends JDBCStatement{
         this.connection = c;
         this.database = database;
         this.sqlQuery = sql;
+        this.query = new JDBCPreparedQuery(sql);
     }
 
     protected static PreparedStatement getInstance(JDBCConnection conn, String sql, Database db) throws SQLException {
         return new JDBCPreparedStatement(conn, sql, db);
     }
+
+    /*https://github.com/mysql/mysql-connector-j/blob/release/8.x/src/main/user-impl/java/com/mysql/cj/jdbc/ClientPreparedStatement.java*/
 
     public void setInt(int parameterIndex, int x) {
         ((PreparedQuery) this.query).getQueryBindings().setInt(getCoreParameterIndex(parameterIndex), x);
