@@ -9,6 +9,7 @@ public class JDBCMyQueryBindings implements MyQueryBindings{
     private String[] parsedSQL;
     private int parameterCount;
     private int allParametersBind = 0;
+    StringBuilder finishedSQL = null;
 
     public JDBCMyQueryBindings(String sql) {
         System.out.println("JDBCMyQueryBindings객체 생성: sql, param count = "+sql+","+parameterCount);
@@ -21,6 +22,7 @@ public class JDBCMyQueryBindings implements MyQueryBindings{
         if (parameterCount == 0){
             System.out.println("parameter count = "+parameterCount);
             allParametersBind = 0;
+            finishedSQL = new StringBuilder(sql);
         }
         else{
             this.bindValues = new Object[parameterCount];
@@ -62,6 +64,10 @@ public class JDBCMyQueryBindings implements MyQueryBindings{
 //    }
 
     public String makeFinishedSQL(){
+        // param count == 0일 때!
+        if (finishedSQL!= null)
+            return finishedSQL.toString();
+
         for (Object bindValue : bindValues) {
             System.out.println("bindValue: "+  bindValue);
             if (bindValue == null) {

@@ -89,9 +89,9 @@ public class JDBCTest
 
 			/*TEST: Prepared Statement, PSTMT */
 			System.out.println("Prepared Statement 테스트");
-			String pstmt_sql = "select * from test where Entry = ?";
+			String pstmt_sql = "select * from test where Entry = 1";
 			preparedStatement = connection.prepareStatement(pstmt_sql);
-			preparedStatement.setInt(1, 1);
+//			preparedStatement.setInt(1, 1);
 //			preparedStatement.setString(2, "Mon");
 			ResultSet result = preparedStatement.executeQuery();
 			System.out.println("----err1?");
