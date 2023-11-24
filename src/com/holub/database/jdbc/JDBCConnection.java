@@ -59,13 +59,13 @@ public class JDBCConnection extends ConnectionAdapter
 	// Establish a connection to the indicated database.
 	//
 	public JDBCConnection(String uri) throws SQLException,
-											 URISyntaxException,
-											 IOException
+			URISyntaxException,
+			IOException
 	{	this( new URI(uri) );
 	}
 
 	public JDBCConnection(URI uri) throws	SQLException,
-											IOException
+			IOException
 	{	database = new Database( uri );
 	}
 
@@ -75,22 +75,28 @@ public class JDBCConnection extends ConnectionAdapter
 	 */
 	public void close() throws SQLException
 	{	try
-		{	
-			autoCommitState.close();
+	{
+		autoCommitState.close();
 
-			database.dump();
-			database=null;	// make the memory reclaimable and
-							// also force a nullPointerException
-							// if anybody tries to use the
-							// connection after it's closed.
-		}
-		catch(IOException e)
-		{	throw new SQLException( e.getMessage() );
-		}
+		database.dump();
+		database=null;	// make the memory reclaimable and
+		// also force a nullPointerException
+		// if anybody tries to use the
+		// connection after it's closed.
+	}
+	catch(IOException e)
+	{	throw new SQLException( e.getMessage() );
+	}
 	}
 
 	public Statement createStatement() throws SQLException
 	{	return new JDBCStatement(database);
+	}
+
+	public PreparedStatement prepareStatement(String sql) throws SQLException
+	{ 	return new JDBCPreparedStatement(sql, database);
+		// cannot be casted without implements PreparedStatement
+		// need to write overriding methods for PreparedStatement
 	}
 
 	/** Terminate the current transactions and start a new
@@ -109,7 +115,7 @@ public class JDBCConnection extends ConnectionAdapter
 	{	autoCommitState.rollback();
 	}
 
-	/** 
+	/**
 	 * Once set true, all SQL statements form a stand-alone
 	 * transaction. A begin is issued automatically when
 	 * auto-commit mode is disabled so that the {@link #commit}
@@ -137,58 +143,58 @@ public class JDBCConnection extends ConnectionAdapter
 	}
 
 	private AutoCommitBehavior enabled =
-		new AutoCommitBehavior()
-		{	public void close() throws SQLException {/* nothing to do */}
-			public void commit() 					{/* nothing to do */}
-			public void rollback() 				 	{/* nothing to do */}
-			public void setAutoCommit( boolean enable )
-			{	if( enable == false )
+			new AutoCommitBehavior()
+			{	public void close() throws SQLException {/* nothing to do */}
+				public void commit() 					{/* nothing to do */}
+				public void rollback() 				 	{/* nothing to do */}
+				public void setAutoCommit( boolean enable )
+				{	if( enable == false )
 				{	database.begin();
 					autoCommitState = disabled;
 				}
-			}
-		};
+				}
+			};
 
-	private AutoCommitBehavior disabled = 
-		new AutoCommitBehavior()
-		{	public void close() throws SQLException
+	private AutoCommitBehavior disabled =
+			new AutoCommitBehavior()
+			{	public void close() throws SQLException
 			{	try
-				{	database.commit();
-				}
-				catch( ParseFailure e )
-				{	throw new SQLException( e.getMessage() );
-				}
+			{	database.commit();
 			}
-			public void commit() throws SQLException
-			{	try
+			catch( ParseFailure e )
+			{	throw new SQLException( e.getMessage() );
+			}
+			}
+				public void commit() throws SQLException
+				{	try
 				{	database.commit();
 					database.begin();
 				}
 				catch( ParseFailure e )
 				{	throw new SQLException( e.getMessage() );
 				}
-			}
-			public void rollback() throws SQLException
-			{	try
+				}
+				public void rollback() throws SQLException
+				{	try
 				{	database.rollback();
 					database.begin();
 				}
 				catch( ParseFailure e )
 				{	throw new SQLException( e.getMessage() );
 				}
-			}
-			public void setAutoCommit( boolean enable ) throws SQLException
-			{	try
+				}
+				public void setAutoCommit( boolean enable ) throws SQLException
+				{	try
 				{	if( enable == true )
-					{	database.commit();
-						autoCommitState = enabled;
-					}
+				{	database.commit();
+					autoCommitState = enabled;
+				}
 				}
 				catch( ParseFailure e )
 				{	throw new SQLException( e.getMessage() );
 				}
-			}
-		};
+				}
+			};
 
 	private AutoCommitBehavior autoCommitState = enabled;
 }
