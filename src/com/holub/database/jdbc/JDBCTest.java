@@ -47,6 +47,7 @@ public class JDBCTest
 
 		Connection connection = null;
 		Statement  statement  = null;
+		PreparedStatement preparedStatement = null;
 		try
 		{	connection = DriverManager.getConnection(			//{=JDBCTest.getConnection}
 							"file:/c:/src/com/holub/database/jdbc/Dbase",
@@ -73,6 +74,7 @@ public class JDBCTest
 			// correctly, there James should be in the databse,
 			// but Fred should not.
 
+			/*TEST: batch implementation*/
 			connection.setAutoCommit( false );
 			statement.executeUpdate( 
 						"insert into test VALUES "+
@@ -83,10 +85,23 @@ public class JDBCTest
 						"insert into test (Customer) VALUES('Fred')");
 			connection.rollback();
 			connection.setAutoCommit( true );
+			/*Finish batch implementation test*/
+
+			/*TEST: Prepared Statement, PSTMT */
+			System.out.println("Prepared Statement 테스트");
+			String pstmt_sql = "select * from test where Entry = ?";
+			preparedStatement = connection.prepareStatement(pstmt_sql);
+			preparedStatement.setInt(1, 1);
+//			preparedStatement.setString(2, "Mon");
+			ResultSet result = preparedStatement.executeQuery();
+
+
+			preparedStatement.close();
+			/*Finish prepared statement test*/
 
 			// Print everything.
 
-			ResultSet result = statement.executeQuery( "select * from test" );
+			//ResultSet result = statement.executeQuery( "select * from test" );
 			while( result.next() )
 			{	System.out.println
 				(	  result.getInt("Entry")		+ ", "
