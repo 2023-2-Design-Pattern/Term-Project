@@ -93,19 +93,19 @@ public class JDBCTest
 			preparedStatement = connection.prepareStatement(pstmt_sql);
 			preparedStatement.setInt(1, 1);
 //			preparedStatement.setString(2, "Mon");
-			ResultSet rs = preparedStatement.executeQuery();
+			ResultSet result = preparedStatement.executeQuery();
 			System.out.println("----err1?");
 //			while(rs.next()){
 //				System.out.println(rs.getInt(1)+ "\t" + rs.getString(2));
 //			}
-			rs.close();
+			//rs.close();
 
 			preparedStatement.close();
 			/*Finish prepared statement test*/
 
 			// Print everything.
 
-			ResultSet result = statement.executeQuery( "select * from test" );
+			//ResultSet result = statement.executeQuery( "select * from test" );
 			while( result.next() )
 			{	System.out.println
 					(	  result.getInt("Entry")		+ ", "
