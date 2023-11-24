@@ -89,16 +89,12 @@ public class JDBCTest
 
 			/*TEST: Prepared Statement, PSTMT */
 			System.out.println("Prepared Statement 테스트");
-			String pstmt_sql = "select * from test where Entry = 1";
+			String pstmt_sql = "select * from test where Entry = ?";
 			preparedStatement = connection.prepareStatement(pstmt_sql);
-//			preparedStatement.setInt(1, 1);
+			preparedStatement.setInt(1, 1);
 //			preparedStatement.setString(2, "Mon");
 			ResultSet result = preparedStatement.executeQuery();
-			System.out.println("----err1?");
-//			while(rs.next()){
-//				System.out.println(rs.getInt(1)+ "\t" + rs.getString(2));
-//			}
-			//rs.close();
+
 
 			preparedStatement.close();
 			/*Finish prepared statement test*/
