@@ -1,9 +1,10 @@
 package com.holub.database.jdbc;
 
 public interface MyQueryBindings {
-    MyQueryBindings clone();
 
 //    void setBoolean(int parameterIndex, boolean x);
+
+    MyQueryBindings clone(String sql);
 
     void setFloat(int parameterIndex, float x);
 
@@ -12,4 +13,6 @@ public interface MyQueryBindings {
     void setLong(int parameterIndex, long x);
 
     void setString(int parameterIndex, String x);
+
+    String makeFinishedSQL();
 }

@@ -10,5 +10,5 @@ public interface PreparedQuery extends Query{
     public MyQueryBindings getQueryBindings();
     public void setQueryBindings(MyQueryBindings queryBindings);
 
-    String makeFinishedQuery();
+    String getBindedQuery();
 }

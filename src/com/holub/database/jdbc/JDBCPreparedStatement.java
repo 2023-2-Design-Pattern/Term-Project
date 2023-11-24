@@ -16,6 +16,8 @@ public class JDBCPreparedStatement extends JDBCStatement{
         super(database);
         this.database = database;
     	this.sqlQuery = sql;
+        this.query = new JDBCPreparedQuery(sql);
+
     }
     public JDBCPreparedStatement(JDBCConnection c, String sql, Database database){
         super(c, database);
@@ -27,7 +29,8 @@ public class JDBCPreparedStatement extends JDBCStatement{
 
     @Override
     public ResultSet executeQuery() throws SQLException {
-        String finishedSQL= ((PreparedQuery)this.query).makeFinishedQuery();
+        String finishedSQL= ((PreparedQuery)this.query).getBindedQuery();
+        //System.out.println("Finished SQL은 "+finishedSQL);
         return super.executeQuery(finishedSQL);
     }
 
