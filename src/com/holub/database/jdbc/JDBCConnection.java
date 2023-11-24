@@ -93,12 +93,6 @@ public class JDBCConnection extends ConnectionAdapter
 	{	return new JDBCStatement(database);
 	}
 
-	public PreparedStatement prepareStatement(String sql) throws SQLException
-	{ 	return new JDBCPreparedStatement(sql, database);
-	// cannot be casted without implements PreparedStatement
-	// need to write overriding methods for PreparedStatement
-	}
-
 	/** Terminate the current transactions and start a new
 	 *  one. Does nothing if auto-commit mode is on.
 	 *  @see #setAutoCommit
