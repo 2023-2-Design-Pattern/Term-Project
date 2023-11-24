@@ -2,6 +2,7 @@ package com.holub.database.jdbc;
 
 import com.holub.database.Database;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class JDBCPreparedStatement extends JDBCStatement{
@@ -24,6 +25,12 @@ public class JDBCPreparedStatement extends JDBCStatement{
         this.query = new JDBCPreparedQuery(sql);
     }
 
+    @Override
+    public ResultSet executeQuery() throws SQLException {
+        String finishedSQL= ((PreparedQuery)this.query).makeFinishedQuery();
+        return super.executeQuery(finishedSQL);
+    }
+
     protected static PreparedStatement getInstance(JDBCConnection conn, String sql, Database db) throws SQLException {
         return new JDBCPreparedStatement(conn, sql, db);
     }
@@ -31,28 +38,24 @@ public class JDBCPreparedStatement extends JDBCStatement{
     /*https://github.com/mysql/mysql-connector-j/blob/release/8.x/src/main/user-impl/java/com/mysql/cj/jdbc/ClientPreparedStatement.java*/
 
     public void setInt(int parameterIndex, int x) {
-        ((PreparedQuery) this.query).getQueryBindings().setInt(getCoreParameterIndex(parameterIndex), x);
+        ((PreparedQuery) this.query).getQueryBindings().setInt(parameterIndex, x);
     }
 
     public void setFloat(int parameterIndex, float x) throws SQLException {
-        ((PreparedQuery) this.query).getQueryBindings().setFloat(getCoreParameterIndex(parameterIndex), x);
+        ((PreparedQuery) this.query).getQueryBindings().setFloat(parameterIndex, x);
     }
 
-    public void setDouble(int parameterIndex, double x) throws SQLException {
-        synchronized (checkClosed().getConnectionMutex()) {
-            ((PreparedQuery) this.query).getQueryBindings().setDouble(getCoreParameterIndex(parameterIndex), x);
-        }
-    }
+//    public void setDouble(int parameterIndex, double x) throws SQLException {
+//        synchronized (checkClosed().getConnectionMutex()) {
+//            ((PreparedQuery) this.query).getQueryBindings().setDouble(getCoreParameterIndex(parameterIndex), x);
+//        }
+//    }
 
     public void setLong(int parameterIndex, long x) throws SQLException {
-        synchronized (checkClosed().getConnectionMutex()) {
-            ((PreparedQuery) this.query).getQueryBindings().setLong(getCoreParameterIndex(parameterIndex), x);
-        }
+        ((PreparedQuery) this.query).getQueryBindings().setLong(parameterIndex, x);
     }
 
     public void setString(int parameterIndex, String x) throws SQLException {
-        synchronized (checkClosed().getConnectionMutex()) {
-            ((PreparedQuery) this.query).getQueryBindings().setString(getCoreParameterIndex(parameterIndex), x);
-        }
+        ((PreparedQuery) this.query).getQueryBindings().setString(parameterIndex, x);
     }
 }
