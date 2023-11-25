@@ -246,11 +246,16 @@ public class Console
 
 		try
 		{
-			// for mac (mac의 경우 "file:/" -> "file:" 로 변환해준다.)
-			connection = DriverManager.getConnection("file:"+databaseName, "harpo", "swordfish");
+			String path;
+			String os = System.getProperty("os.name").toLowerCase();
 
-			// for window
-			// connection = DriverManager.getConnection("file:/"+databaseName, "harpo", "swordfish");
+			if(os.contains("win")) {
+				path = "file:/"+databaseName.replace("\\", "/");
+			} else {
+				path = "file:"+databaseName;
+			}
+			connection = DriverManager.getConnection(path, "harpo", "swordfish");
+
 			statement = connection.createStatement();
 		}
 		catch( SQLException e )
