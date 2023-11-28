@@ -672,12 +672,27 @@ import com.holub.tools.ArrayIterator;
 			for (int index : orderByColumnIndex) {
 				Comparable<Object> value1 = (Comparable<Object>) o1[index];
 				Comparable<Object> value2 = (Comparable<Object>) o2[index];
-				int result = value1.compareTo(value2);
-				if (!ascending) {
-					result = -result;
-				}
-				if (result != 0) {
-					return result;
+
+				if (value1 instanceof Number && value2 instanceof Number) {
+					double num1 = ((Number) value1).doubleValue();
+					double num2 = ((Number) value2).doubleValue();
+					int result = Double.compare(num1, num2);
+
+					if (!ascending) {
+						result = -result;
+					}
+
+					if (result != 0) {
+						return result;
+					}
+				} else {
+					int result = value1.compareTo(value2);
+					if (!ascending) {
+						result = -result;
+					}
+					if (result != 0) {
+						return result;
+					}
 				}
 			}
 			return 0;
