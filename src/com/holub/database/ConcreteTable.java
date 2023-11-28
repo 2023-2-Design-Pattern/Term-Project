@@ -673,26 +673,27 @@ import com.holub.tools.ArrayIterator;
 				Comparable<Object> value1 = (Comparable<Object>) o1[index];
 				Comparable<Object> value2 = (Comparable<Object>) o2[index];
 
-				if (value1 instanceof Number && value2 instanceof Number) {
-					double num1 = ((Number) value1).doubleValue();
-					double num2 = ((Number) value2).doubleValue();
-					int result = Double.compare(num1, num2);
+				boolean isNumber = o1[index] != null;
+				try {
+					double d = Double.parseDouble((String) o1[index]);
+				} catch (NumberFormatException e) {
+					isNumber = false;
+				}
 
-					if (!ascending) {
-						result = -result;
-					}
-
-					if (result != 0) {
-						return result;
-					}
+				int result;
+				if(isNumber) {
+					double num1 = Double.parseDouble((String) o1[index]);
+					double num2 = Double.parseDouble((String) o2[index]);
+					result = Double.compare(num1, num2);
 				} else {
-					int result = value1.compareTo(value2);
-					if (!ascending) {
-						result = -result;
-					}
-					if (result != 0) {
-						return result;
-					}
+					result = value1.compareTo(value2);
+				}
+
+				if (!ascending) {
+					result = -result;
+				}
+				if (result != 0) {
+					return result;
 				}
 			}
 			return 0;
