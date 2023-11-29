@@ -11,5 +11,5 @@ public interface PreparedQuery extends Query{
     public void setFloat(int parameterIndex, float x);
     public void setLong(int parameterIndex, Long x);
     public void setString(int parameterIndex, String x) throws Exception;
-
+    void clearParameters();
 }

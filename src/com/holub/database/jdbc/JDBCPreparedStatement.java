@@ -114,6 +114,6 @@ public class JDBCPreparedStatement extends JDBCStatement {
     }
 
     public void clearParameters() {
-
+        ((PreparedQuery) this.query).clearParameters();
     }
 }

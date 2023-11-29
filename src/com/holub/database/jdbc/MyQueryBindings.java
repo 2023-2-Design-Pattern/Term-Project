@@ -11,4 +11,6 @@ public interface MyQueryBindings {
     void setString(int parameterIndex, String x) throws Exception;
 
     String makeFinishedSQL();
+
+    void clearParameters();
 }
