@@ -77,11 +77,9 @@ public class JDBCStatement extends StatementAdapter
 	}
 
 	public void addBatch(String sql) throws SQLException {
-		//synchronized (checkClosed().getConnectionMutex()){
 		if (sql != null){
 			sql_batch.add(sql);
 		}
-		//}
 	}
 
 	public int[] executeBatch() throws SQLException {
