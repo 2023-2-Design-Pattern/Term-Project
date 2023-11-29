@@ -6,13 +6,15 @@ import com.holub.database.jdbc.adapters.ResultSetAdapter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class RMIResultSetAdapter extends ResultSetAdapter implements Serializable {
+    private transient JDBCResultSet resultSet;
     public ArrayList<Object[]> rowSet = new ArrayList<>();
 
     public RMIResultSetAdapter(JDBCResultSet rs) {
-        Cursor cursor = rs.getCursor();
+        resultSet = rs;
+
+        Cursor cursor = resultSet.getCursor();
         while (cursor.advance()) {
             Object[] copyRow = new Object[cursor.columnCount()];
             for (int i = 0; i < cursor.columnCount(); i++) {
