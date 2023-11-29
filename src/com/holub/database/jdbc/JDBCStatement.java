@@ -71,6 +71,7 @@ public class JDBCStatement extends StatementAdapter
 	{	throw new SQLException( e.getMessage() );
 	}
 	}
+
 	public void close() throws SQLException
 	{	// does nothing.
 	}

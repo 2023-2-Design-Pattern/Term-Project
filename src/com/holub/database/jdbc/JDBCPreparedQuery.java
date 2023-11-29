@@ -23,6 +23,8 @@ public class JDBCPreparedQuery implements PreparedQuery{
         System.out.println("finished query : "+test);
         return test;
     }
+
+
     @Override
     public QueryInfo getQueryInfo() {
         return this.queryInfo;

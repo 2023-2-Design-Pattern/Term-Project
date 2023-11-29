@@ -12,7 +12,7 @@ public interface MyQueryBindings {
 
     void setLong(int parameterIndex, long x);
 
-    void setString(int parameterIndex, String x);
+    void setString(int parameterIndex, String x) throws Exception;
 
     String makeFinishedSQL();
 }
