@@ -113,6 +113,7 @@ public class MyJDBCTest {
                             + result.getString("Type")
                     );
         }
+        statement.clearBatch();
         /*Finish batch implementation test*/
     }
 
@@ -140,7 +141,11 @@ public class MyJDBCTest {
                         + result.getString("Type")
                 );
         }
+        preparedStatement.clearBatch();
+        preparedStatement.clearParameters();
+
         preparedStatement.close();
+
     }
 
     @Test
@@ -164,8 +169,9 @@ public class MyJDBCTest {
                         + result.getString("Type")
                 );
         }
-        preparedStatement.close();
+        preparedStatement.clearBatch();
         preparedStatement.clearParameters();
+        preparedStatement.close();
 
     }
 }
