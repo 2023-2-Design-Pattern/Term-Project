@@ -6,15 +6,12 @@ import java.util.Arrays;
 public class JDBCMyQueryBindings implements MyQueryBindings{
     private Object[] bindValues;
     private String sql;
-    private String[] parsedSQL;
     private int parameterCount;
     private int allParametersBind = 0;
     StringBuilder finishedSQL = null;
 
     public JDBCMyQueryBindings(String sql) {
-        // 여기서 sql문 파싱하는 걸 넣어준다.
         this.sql = sql;
-        this.parsedSQL = sql.split(" ");
         this.parameterCount =(int) sql.chars().filter(ch -> ch == '?').count();
         if (parameterCount == 0){
             this.allParametersBind = 0;
@@ -85,12 +82,7 @@ public class JDBCMyQueryBindings implements MyQueryBindings{
         if (x == null)
             throw new Exception("parameter string values are null!!");
 //        System.out.println("set String 함수의 실행, (param, x) = ("+parameterIndex+", "+x+"), allParametersBind = "+this.allParametersBind);
-        this.bindValues[parameterIndex - 1]= new String(x);
+        this.bindValues[parameterIndex - 1]= x;
         this.allParametersBind--;
-//        if (x == null) {
-//            setNull(parameterIndex);
-//            return;
-//        }
-//        getBinding(parameterIndex, false).setBinding(x, HolubsqlType.VARCHAR, this.numberOfExecutions, this.sendTypesToServer);
     }
 }
