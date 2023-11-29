@@ -12,7 +12,6 @@ public class JDBCMyQueryBindings implements MyQueryBindings{
     StringBuilder finishedSQL = null;
 
     public JDBCMyQueryBindings(String sql) {
-        System.out.println("JDBCMyQueryBindings객체 생성: sql, param count = "+sql+","+parameterCount);
         // 여기서 sql문 파싱하는 걸 넣어준다.
         this.sql = sql;
         this.parsedSQL = sql.split(" ");
@@ -21,7 +20,7 @@ public class JDBCMyQueryBindings implements MyQueryBindings{
                 .count();
         if (parameterCount == 0){
             System.out.println("parameter count = "+parameterCount);
-            allParametersBind = 0;
+            this.allParametersBind = 0;
             finishedSQL = new StringBuilder(sql);
         }
         else{
@@ -32,18 +31,8 @@ public class JDBCMyQueryBindings implements MyQueryBindings{
             this.allParametersBind = parameterCount;
             //this.queryBindings = this.queryBindings.clone(); // PATTERN - PROTOTYPE: 이미 생성되어 있는 query bindings객체를 이용하는 프로토타입 패턴 적용
         }
-
+        System.out.println("JDBCMyQueryBindings객체 생성: sql= "+sql+", param count = "+this.allParametersBind);
     }
-
-    //    public JDBCMyQueryBindings(int parameterCount) {
-//        this.parameterCount = parameterCount;
-//        System.out.println("JDBCMyQueryBindings객체 생성, param count = "+parameterCount);
-//        this.bindValues = new Object[parameterCount];
-//        for (int i = 0; i < parameterCount; i++) {
-//            this.bindValues[i] = null;//null object pattern
-//        }
-//    }
-
 
     @Override
     public MyQueryBindings clone(String sql) {
@@ -121,6 +110,7 @@ public class JDBCMyQueryBindings implements MyQueryBindings{
 
     @Override
     public void setString(int parameterIndex, String x) {
+        System.out.println("set String 함수의 실행, (param, x) = ("+parameterIndex+", "+x+")");
         this.bindValues[parameterIndex - 1]= x;
         this.allParametersBind--;
 
