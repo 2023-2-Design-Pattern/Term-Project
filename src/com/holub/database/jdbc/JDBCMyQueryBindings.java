@@ -24,19 +24,6 @@ public class JDBCMyQueryBindings implements MyQueryBindings{
 //        System.out.println("JDBCMyQueryBindings객체 생성: sql= "+sql+", param count = "+this.allParametersBind);
     }
 
-    @Override
-    public MyQueryBindings clone(String sql) {
-        //        BindValue[] bvs = new BindValue[this.bindValues.length];
-//        for (int i = 0; i < this.bindValues.length; i++) {
-//            bvs[i] = this.bindValues[i].clone();
-//        }
-//        newBindings.setBindValues(bvs);
-//        newBindings.isLoadDataQuery = this.isLoadDataQuery;
-//        newBindings.sendTypesToServer.set(this.sendTypesToServer.get());
-//        newBindings.setLongParameterSwitchDetected(this.isLongParameterSwitchDetected());
-        return new JDBCMyQueryBindings(sql);
-    }
-
     public String makeFinishedSQL(){
         // param count == 0일 때!
         if (finishedSQL!= null)
@@ -84,5 +71,11 @@ public class JDBCMyQueryBindings implements MyQueryBindings{
 //        System.out.println("set String 함수의 실행, (param, x) = ("+parameterIndex+", "+x+"), allParametersBind = "+this.allParametersBind);
         this.bindValues[parameterIndex - 1]= x;
         this.allParametersBind--;
+    }
+
+    public void clearParameters(){
+        this.allParametersBind = 0;
+        this.parameterCount = 0;
+        this.bindValues = null;
     }
 }
