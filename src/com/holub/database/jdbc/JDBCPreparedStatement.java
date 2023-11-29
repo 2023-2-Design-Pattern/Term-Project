@@ -1,13 +1,14 @@
 package com.holub.database.jdbc;
 
 import com.holub.database.Database;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JDBCPreparedStatement extends JDBCStatement{
+public class JDBCPreparedStatement extends JDBCStatement {
     private Database database;
     private String sqlQuery;
     private String finalSql;
@@ -31,6 +32,7 @@ public class JDBCPreparedStatement extends JDBCStatement{
         this.query = new JDBCPreparedQuery(sql);
     }
 
+    @Override
     public int executeUpdate() throws SQLException {
         String finishedSQL= ((PreparedQuery)this.query).getBindedQuery();
         this.finalSql = finishedSQL;
@@ -92,26 +94,26 @@ public class JDBCPreparedStatement extends JDBCStatement{
     /*https://github.com/mysql/mysql-connector-j/blob/release/8.x/src/main/user-impl/java/com/mysql/cj/jdbc/ClientPreparedStatement.java*/
 
     public void setInt(int parameterIndex, int x) {
-        ((PreparedQuery) this.query).getQueryBindings().setInt(parameterIndex, x);
+        ((PreparedQuery) this.query).setInt(parameterIndex, x);
     }
 
     public void setFloat(int parameterIndex, float x) throws SQLException {
-        ((PreparedQuery) this.query).getQueryBindings().setFloat(parameterIndex, x);
+        ((PreparedQuery) this.query).setFloat(parameterIndex, x);
     }
 
     public void setLong(int parameterIndex, long x) throws SQLException {
-        ((PreparedQuery) this.query).getQueryBindings().setLong(parameterIndex, x);
+        ((PreparedQuery) this.query).setLong(parameterIndex, x);
     }
 
     public void setString(int parameterIndex, String x) throws SQLException {
         try {
-            ((PreparedQuery) this.query).getQueryBindings().setString(parameterIndex, x);
+            ((PreparedQuery) this.query).setString(parameterIndex, x);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void clearParameters() {
-
+        ((PreparedQuery) this.query).clearParameters();
     }
 }
