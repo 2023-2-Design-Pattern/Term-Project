@@ -94,24 +94,20 @@ public class JDBCPreparedStatement extends JDBCStatement {
     /*https://github.com/mysql/mysql-connector-j/blob/release/8.x/src/main/user-impl/java/com/mysql/cj/jdbc/ClientPreparedStatement.java*/
 
     public void setInt(int parameterIndex, int x) {
-        MyQueryBindings myQueryBindings = ((PreparedQuery) this.query).getQueryBindings();
-        myQueryBindings.setInt(parameterIndex, x);
+        ((PreparedQuery) this.query).setInt(parameterIndex, x);
     }
 
     public void setFloat(int parameterIndex, float x) throws SQLException {
-        MyQueryBindings myQueryBindings = ((PreparedQuery) this.query).getQueryBindings();
-        myQueryBindings.setFloat(parameterIndex, x);
+        ((PreparedQuery) this.query).setFloat(parameterIndex, x);
     }
 
     public void setLong(int parameterIndex, long x) throws SQLException {
-        MyQueryBindings myQueryBindings = ((PreparedQuery) this.query).getQueryBindings();
-        myQueryBindings.setLong(parameterIndex, x);
+        ((PreparedQuery) this.query).setLong(parameterIndex, x);
     }
 
     public void setString(int parameterIndex, String x) throws SQLException {
         try {
-            MyQueryBindings myQueryBindings = ((PreparedQuery) this.query).getQueryBindings();
-            myQueryBindings.setString(parameterIndex, x);
+            ((PreparedQuery) this.query).setString(parameterIndex, x);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -24,6 +24,26 @@ public class JDBCPreparedQuery implements PreparedQuery{
         return test;
     }
 
+    @Override
+    public void setInt(int parameterIndex, int x) {
+        this.queryBindings.setInt(parameterIndex, x);
+    }
+
+    @Override
+    public void setFloat(int parameterIndex, float x) {
+        this.queryBindings.setFloat(parameterIndex, x);
+    }
+
+    @Override
+    public void setLong(int parameterIndex, Long x) {
+        this.queryBindings.setLong(parameterIndex, x);
+    }
+
+    @Override
+    public void setString(int parameterIndex, String x) throws Exception {
+        this.queryBindings.setString(parameterIndex, x);
+    }
+
 
     @Override
     public QueryInfo getQueryInfo() {
@@ -36,10 +56,6 @@ public class JDBCPreparedQuery implements PreparedQuery{
     @Override
     public void setParameterCount(int parameterCount) {
         this.parameterCount = parameterCount;
-    }
-    @Override
-    public MyQueryBindings getQueryBindings() {
-        return this.queryBindings;
     }
     @Override
     public void setQueryBindings(MyQueryBindings myQueryBindings) {
