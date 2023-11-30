@@ -25,7 +25,7 @@ public class JDBC_Test {
     public void setUp() throws Exception {
         Class.forName("com.holub.database.jdbc.JDBCDriver").newInstance();
         connection = DriverManager.getConnection(            //{=JDBCTest.getConnection}
-                "file:/Users/bb8/2023_Fall/DesignPattern/new-Term-Project/Term-Project/src/com/holub/database/jdbc/Dbase",
+                "file:c:/dp2023",
                 "harpo", "swordfish");
 
         statement = connection.createStatement();
