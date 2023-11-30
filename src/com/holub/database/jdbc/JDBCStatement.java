@@ -54,33 +54,32 @@ public class JDBCStatement extends StatementAdapter
 
 	public int executeUpdate(String sqlString) throws SQLException
 	{	try
-		{	database.execute( sqlString );
-			return database.affectedRows();
-		}
-		catch( Exception e )
-		{	throw new SQLException( e.getMessage() );
-		}
+	{	database.execute( sqlString );
+		return database.affectedRows();
+	}
+	catch( Exception e )
+	{	throw new SQLException( e.getMessage() );
+	}
 	}
 
 	public ResultSet executeQuery(String sqlQuery) throws SQLException
 	{	try
-		{	Table result = database.execute( sqlQuery );
-			return new JDBCResultSet( result.rows() );
-		}
-		catch( Exception e )
-		{	throw new SQLException( e.getMessage() );
-		}
+	{	Table result = database.execute( sqlQuery );
+		return new JDBCResultSet( result.rows() );
 	}
+	catch( Exception e )
+	{	throw new SQLException( e.getMessage() );
+	}
+	}
+
 	public void close() throws SQLException
 	{	// does nothing.
 	}
 
 	public void addBatch(String sql) throws SQLException {
-		//synchronized (checkClosed().getConnectionMutex()){
-			if (sql != null){
-				sql_batch.add(sql);
-			}
-		//}
+		if (sql != null){
+			sql_batch.add(sql);
+		}
 	}
 
 	public int[] executeBatch() throws SQLException {

@@ -414,6 +414,12 @@ public final class Database
 		CHAR		= tokens.create( "(var)?char"				),
 		DATE		= tokens.create( "date(\\s*\\(.*?\\))?"		),
 
+		//additional token
+		DISTINCT	= tokens.create( "'DISTINCT" ),
+		ORDER_BY	= tokens.create( "'ORDER BY" ),
+		ASC			= tokens.create( "'ASC" ),
+		DESC		= tokens.create( "'DESC" ),
+
 		IDENTIFIER	= tokens.create( "[a-zA-Z_0-9/\\\\:~]+"		); //{=Database.lastToken}
 
 	private String  expression;	// SQL expression being parsed
@@ -796,7 +802,14 @@ public final class Database
 			affectedRows = doDelete( tableName, expr() );
 		}
 		else if( in.matchAdvance(SELECT) != null )
-		{	List columns = idList();
+		{
+			QueryOptions queryOptions = new QueryOptions();
+			if( in.matchAdvance(DISTINCT) != null )
+			{
+				queryOptions.setDistinct();
+			}
+
+			List columns = idList();
 
 			String into = null;
 			if( in.matchAdvance(INTO) != null )
@@ -807,8 +820,23 @@ public final class Database
 
 			Expression where = (in.matchAdvance(WHERE) == null)
 								? null : expr();
+
+			if( in.matchAdvance(ORDER_BY) != null )
+			{
+				queryOptions.setOrderBy();
+				queryOptions.setOrderByColumns(idList());
+
+				if ( in.matchAdvance(DESC) != null ) {
+					queryOptions.setOrderByASC(false);
+				} else if ( in.matchAdvance(ASC) != null ) {
+					queryOptions.setOrderByASC(true);
+				} else {
+					queryOptions.setOrderByASC(true);
+				}
+			}
+
 			Table result = doSelect(columns, into,
-								requestedTableNames, where );
+								requestedTableNames, where, queryOptions );
 			return result;
 		}
 		else
@@ -1391,7 +1419,7 @@ public final class Database
 	//
 	private Table doSelect( List columns, String into,
 										List requestedTableNames,
-										final Expression where )
+										final Expression where, QueryOptions queryOptions )
 										throws ParseFailure
 	{
 
@@ -1435,7 +1463,7 @@ public final class Database
 			};
 
 		try
-		{	Table result = primary.select(selector, columns, participantsInJoin);
+		{	Table result = primary.select(selector, columns, participantsInJoin, queryOptions);
 
 			// If this is a "SELECT INTO <table>" request, remove the 
 			// returned table from the UnmodifiableTable wrapper, give

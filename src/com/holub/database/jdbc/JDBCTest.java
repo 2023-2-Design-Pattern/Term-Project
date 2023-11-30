@@ -35,7 +35,7 @@ import java.sql.*;
 public class JDBCTest
 {
 	static String[] data =
-			{		"(1,  'John',   'Mon', 1, 'JustJoe')",
+			{	"(1,  'John',   'Mon', 1, 'JustJoe')",
 					"(2,  'JS',     'Mon', 1, 'Cappuccino')",
 					"(3,  'Marie',  'Mon', 2, 'CaffeMocha')",
 			};
@@ -74,13 +74,13 @@ public class JDBCTest
 			// but Fred should not.
 
 			connection.setAutoCommit( false );
-			statement.addBatch(
+			statement.executeUpdate(
 					"insert into test VALUES "+
 							"(4, 'James',  'Thu', 1, 'Cappuccino')" );
-			statement.addBatch(
-					"insert into test (Customer) VALUES('Fred')");
-			int[] batch_result = statement.executeBatch();
 			connection.commit();
+
+			statement.executeUpdate(
+					"insert into test (Customer) VALUES('Fred')");
 			connection.rollback();
 			connection.setAutoCommit( true );
 
