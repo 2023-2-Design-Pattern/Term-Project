@@ -1,3 +1,11 @@
+# design-pattern
+## Holub SQL
+
+## 실행 환경
+- JDK 17
+- Gradle
+
+--- 
 ## Git Rule
 
 ### 커밋 룰
